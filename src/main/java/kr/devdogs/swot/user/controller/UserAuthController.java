@@ -1,0 +1,92 @@
+package kr.devdogs.swot.user.controller;
+import kr.devdogs.swot.security.jwt.JwtService;
+import kr.devdogs.swot.user.dto.User;
+import kr.devdogs.swot.user.service.UserAuthService;
+import kr.devdogs.swot.user.service.UserAuthServiceImpl;
+import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+/* USER
+1. 회원가입
+2. 로그인
+3. 비밀번호 변경
+ */
+@RestController
+@RequestMapping("/auth/user")
+public class UserAuthController {
+
+    @Autowired
+    private UserAuthService userAuthService;
+    @Autowired
+    private JwtService jwtService;
+
+    // 회원가입
+    @RequestMapping(value="/signUp", method=RequestMethod.POST)
+    public JSONObject signUp(@RequestBody User user){
+        JSONObject JSON = new JSONObject();
+        System.out.println("회원가입");
+        if(user.getEmail() == null ||
+        user.getName() == null ||
+        user.getPassword() == null ||
+        user.getPhone() == null) {
+            JSON.put("statusCode", HttpStatus.BAD_REQUEST);
+            JSON.put("statusMsg", "Email, Password, Name, Phone is Required");
+            return JSON;
+        }
+
+        if(userAuthService.isEmailDuplicate(user)){
+            JSON.put("statusCode", HttpStatus.CONFLICT);
+            JSON.put("statusMsg", "이메일이 중복됩니다.");
+            return JSON;
+        }
+
+        if(userAuthService.userSignUp(user)) {
+            JSON.put("statusCode", HttpStatus.OK);
+            JSON.put("statusMsg", "SignUp Success");
+            return JSON;
+        }else{
+            JSON.put("statusCode", "520");
+            JSON.put("statusMsg", "Unknown Error");
+            return JSON;
+        }
+    }
+
+    // 로그인
+    @RequestMapping(value="/signIn", method=RequestMethod.POST)
+    public JSONObject signIn(@RequestBody User user){
+        JSONObject JSON = new JSONObject();
+
+        if(user.getEmail() == null ||
+                user.getName() == null ||
+                user.getPassword() == null){
+            JSON.put("statusCode", HttpStatus.BAD_REQUEST);
+            JSON.put("statusMsg", "Email, Password is Required");
+            return JSON;
+        }
+
+        User currentMember = userAuthService.userSignIn(user);
+        if(currentMember != null) {
+            JSON.put("statusCode", HttpStatus.OK);
+            JSON.put("statusMsg", "SignIn Success");
+            JSON.put("accessToken", jwtService.accessToken(user.getEmail()));
+            JSON.put("refreshToken", currentMember.getRefreshToken());
+            return JSON;
+        } else {
+            JSON.put("statusCode", "520");
+            JSON.put("statusMsg", "Unknown Error");
+            return JSON;
+        }
+    }
+
+    @RequestMapping(value="/test", method=RequestMethod.POST)
+    public JSONObject test(@RequestBody User user){
+        System.out.println("123");
+        JSONObject JSON = new JSONObject();
+        JSON.put("USER", user);
+        return JSON;
+    }
+
+
+}
