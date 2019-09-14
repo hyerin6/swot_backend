@@ -1,6 +1,6 @@
 package kr.devdogs.swot.user.service;
 
-import kr.devdogs.swot.security.jwt.JwtService;
+import kr.devdogs.swot.security.jwt.JwtServiceImpl;
 import kr.devdogs.swot.user.dto.User;
 import kr.devdogs.swot.user.mapper.UserMapper;
 import kr.devdogs.swot.user.service.mail.MailService;
@@ -17,7 +17,7 @@ public class UserAuthServiceImpl implements UserAuthService{
 
     @Autowired private UserMapper userMapper;
     @Autowired private SHA256Util sha256Util;
-    @Autowired private JwtService jwtService;
+    @Autowired private JwtServiceImpl jwtServiceImpl;
     @Autowired private MailService mailService;
 
     private static final Logger LOG = LogManager.getLogger(UserAuthServiceImpl.class);
@@ -51,16 +51,17 @@ public class UserAuthServiceImpl implements UserAuthService{
     // 로그인
     @Override
     public User userSignin(User user){
-        String pw = user.getPassword();
+        /*String pw = user.getPassword();
         try {
             pw = sha256Util.getEncrypt(pw, sha256Util.generateSalt());
         } catch(Exception e) {
             LOG.error("Password Enctypt Fail - Password : " + pw);
         }
         user.setPassword(pw);
+         */
 
         // refreshToken은 USER 디비에 저장한다.
-        String refreshToken = jwtService.refreshToken(user.getEmail());
+        String refreshToken = jwtServiceImpl.refreshToken(user.getEmail());
         user.setRefreshToken(refreshToken);
 
         User currentUser = userMapper.userSignIn(user);
@@ -76,6 +77,14 @@ public class UserAuthServiceImpl implements UserAuthService{
             return false;
         else
             return true;
+    }
+
+    @Override
+    public int test(User user){
+        user.setUid("test");
+        int result = userMapper.signUp(user);
+        if(result == 1) return 1;
+        else return 0;
     }
 
 }

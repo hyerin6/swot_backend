@@ -1,11 +1,12 @@
 package kr.devdogs.swot.user.controller;
-import kr.devdogs.swot.security.jwt.JwtService;
+
+import kr.devdogs.swot.security.jwt.JwtServiceImpl;
 import kr.devdogs.swot.user.dto.User;
 import kr.devdogs.swot.user.service.UserAuthService;
-import kr.devdogs.swot.user.service.UserAuthServiceImpl;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 /* USER
@@ -14,17 +15,17 @@ import org.springframework.web.bind.annotation.*;
 3. 비밀번호 변경
  */
 @RestController
-@RequestMapping("/auth/user")
+@RequestMapping(value = "/auth/user")
 public class UserAuthController {
 
     @Autowired
     private UserAuthService userAuthService;
     @Autowired
-    private JwtService jwtService;
+    private JwtServiceImpl jwtServiceImpl;
 
     // 회원가입
     @RequestMapping(value="/signup", method=RequestMethod.POST)
-    public JSONObject signup(@RequestBody User user){
+    public JSONObject signup(User user){
         JSONObject JSON = new JSONObject();
         System.out.println("회원가입");
         if(user.getEmail() == null ||
@@ -55,11 +56,10 @@ public class UserAuthController {
 
     // 로그인
     @RequestMapping(value="/signin", method=RequestMethod.POST)
-    public JSONObject signin(@RequestBody User user){
+    public JSONObject signin(User user){
         JSONObject JSON = new JSONObject();
 
         if(user.getEmail() == null ||
-                user.getName() == null ||
                 user.getPassword() == null){
             JSON.put("statusCode", HttpStatus.BAD_REQUEST);
             JSON.put("statusMsg", "Email, Password is Required");
@@ -70,7 +70,7 @@ public class UserAuthController {
         if(currentMember != null) {
             JSON.put("statusCode", HttpStatus.OK);
             JSON.put("statusMsg", "SignIn Success");
-            JSON.put("accessToken", jwtService.accessToken(user.getEmail()));
+            JSON.put("accessToken", jwtServiceImpl.accessToken(user.getEmail()));
             JSON.put("refreshToken", currentMember.getRefreshToken());
             return JSON;
         } else {
@@ -80,12 +80,13 @@ public class UserAuthController {
         }
     }
 
-    @RequestMapping(value="/test", method=RequestMethod.POST)
-    public JSONObject test(@RequestBody User user){
-        System.out.println("123");
+    @RequestMapping(value="/test", method = RequestMethod.GET)
+    public JSONObject test(@RequestParam String id){
         JSONObject JSON = new JSONObject();
-        JSON.put("USER", user);
+        JSON.put("id", id);
+        System.out.println(JSON);
         return JSON;
+
     }
 
 

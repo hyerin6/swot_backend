@@ -12,4 +12,7 @@ public interface UserAuthService {
     // 이메일 중복 검사, 중복이면 return true
     public boolean isEmailDuplicate(User user);
 
+    // test
+    public int test(User user);
+
 }

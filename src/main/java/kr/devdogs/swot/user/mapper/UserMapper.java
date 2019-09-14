@@ -14,7 +14,7 @@ public interface UserMapper {
     public int signUp(User user);
 
     //로그인
-    @Select("SELECT email, password FROM USER where email = #{email} AND password=#{password}")
+    @Select("SELECT email FROM USER where email = #{email}")
     public User userSignIn(User user);
 
     // 이메일 중복 체크

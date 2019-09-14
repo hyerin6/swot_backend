@@ -7,17 +7,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
-@Service
+@Service("jwtService")
 public class JwtServiceImpl implements JwtService{
 
     private static final Logger LOG = LogManager.getLogger(JwtServiceImpl.class);
-    private static final String SALT = "DBcapSecret";
+    private static final String SALT = "secret";
 
-    // accessToken 발급
+    // access
     @Override
     public String accessToken(String subject) {
         Date Now = new Date();
-        // 유효 기간 14일
         Date expireTime = new Date(Now.getTime() + 1000 * 60 * 60 * 24 * 14);
         String jwt = Jwts.builder()
                 .setExpiration(expireTime)
@@ -27,12 +26,10 @@ public class JwtServiceImpl implements JwtService{
         return jwt;
     }
 
-    // refreshToken 발급
     @Override
     public String refreshToken(String subject) {
         Date Now = new Date();
-        // 유효 기간 30일
-        Date expireTime = new Date(Now.getTime() + 1000 * 60 * 60 * 24 * 30);
+        Date expireTime = new Date(Now.getTime() + 1000 * 60 * 60 * 24 * 365 * 5);
         String jwt = Jwts.builder()
                 .setExpiration(expireTime)
                 .setSubject(subject)
@@ -41,31 +38,22 @@ public class JwtServiceImpl implements JwtService{
         return jwt;
     }
 
-    // token 확인
     @Override
-    public boolean verifyToken(String token) {
-        try {
-            Jwts.parser().setSigningKey(SALT).parseClaimsJws(token);
-            return true;
-        } catch (SignatureException e) {
-            LOG.info("Invalid JWT signature.");
-            LOG.trace("Invalid JWT signature trace: {}", e);
-        } catch (MalformedJwtException e) {
-            LOG.info("Invalid JWT token.");
-            LOG.trace("Invalid JWT token trace: {}", e);
-        } catch (ExpiredJwtException e) {
-            LOG.info("Expired JWT token.");
-            LOG.trace("Expired JWT token trace: {}", e);
-        } catch (UnsupportedJwtException e) {
-            LOG.info("Unsupported JWT token.");
-            LOG.trace("Unsupported JWT token trace: {}", e);
-        } catch (IllegalArgumentException e) {
-            LOG.info("JWT token compact of handler are invalid.");
-            LOG.trace("JWT token compact of handler are invalid trace: {}", e);
+    public int verifyToken(String token) {
+        try{
+            Jwts.parser().setSigningKey(SALT).parseClaimsJws(token).getBody();
+            return 200;
+        }catch (ExpiredJwtException e) {
+            LOG.error("유효기간이 지난 token을 사용했습니다.", e);
+            return 700;
+        } catch (JwtException e) {
+            LOG.error("jwt error..", e);
+            return 701;
         }
-        return false;
     }
 
+
+    // Token 해독 및 객체 생성
     @Override
     public String decode(String token) {
         Claims Claim = Jwts.parser().setSigningKey(SALT).parseClaimsJws(token).getBody();

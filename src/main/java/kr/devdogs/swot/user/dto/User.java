@@ -1,9 +1,12 @@
 package kr.devdogs.swot.user.dto;
 
 import lombok.Data;
+import org.springframework.stereotype.Repository;
+
 import java.util.Date;
 
 @Data
+@Repository
 public class User {
     String uid;
     String name;

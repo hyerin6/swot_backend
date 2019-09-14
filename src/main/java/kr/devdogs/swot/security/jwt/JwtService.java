@@ -3,6 +3,6 @@ package kr.devdogs.swot.security.jwt;
 public interface JwtService {
     public String accessToken(String subject);
     public String refreshToken(String subject);
-    public boolean verifyToken(String token);
+    public int verifyToken(String token);
     public String decode(String token);
 }
