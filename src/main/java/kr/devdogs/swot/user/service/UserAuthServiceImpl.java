@@ -24,7 +24,7 @@ public class UserAuthServiceImpl implements UserAuthService{
 
     // 회원가입
     @Override
-    public boolean userSignUp(User user){
+    public boolean userSignup(User user){
         String pw = user.getPassword();
         String email = user.getEmail();
         try {
@@ -50,7 +50,7 @@ public class UserAuthServiceImpl implements UserAuthService{
 
     // 로그인
     @Override
-    public User userSignIn(User user){
+    public User userSignin(User user){
         String pw = user.getPassword();
         try {
             pw = sha256Util.getEncrypt(pw, sha256Util.generateSalt());

@@ -23,8 +23,8 @@ public class UserAuthController {
     private JwtService jwtService;
 
     // 회원가입
-    @RequestMapping(value="/signUp", method=RequestMethod.POST)
-    public JSONObject signUp(@RequestBody User user){
+    @RequestMapping(value="/signup", method=RequestMethod.POST)
+    public JSONObject signup(@RequestBody User user){
         JSONObject JSON = new JSONObject();
         System.out.println("회원가입");
         if(user.getEmail() == null ||
@@ -42,7 +42,7 @@ public class UserAuthController {
             return JSON;
         }
 
-        if(userAuthService.userSignUp(user)) {
+        if(userAuthService.userSignup(user)) {
             JSON.put("statusCode", HttpStatus.OK);
             JSON.put("statusMsg", "SignUp Success");
             return JSON;
@@ -54,8 +54,8 @@ public class UserAuthController {
     }
 
     // 로그인
-    @RequestMapping(value="/signIn", method=RequestMethod.POST)
-    public JSONObject signIn(@RequestBody User user){
+    @RequestMapping(value="/signin", method=RequestMethod.POST)
+    public JSONObject signin(@RequestBody User user){
         JSONObject JSON = new JSONObject();
 
         if(user.getEmail() == null ||
@@ -66,7 +66,7 @@ public class UserAuthController {
             return JSON;
         }
 
-        User currentMember = userAuthService.userSignIn(user);
+        User currentMember = userAuthService.userSignin(user);
         if(currentMember != null) {
             JSON.put("statusCode", HttpStatus.OK);
             JSON.put("statusMsg", "SignIn Success");

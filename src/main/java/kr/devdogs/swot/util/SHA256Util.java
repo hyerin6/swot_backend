@@ -1,9 +1,12 @@
 package kr.devdogs.swot.util;
 
+import org.springframework.stereotype.Component;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
+@Component
 public class SHA256Util {
 
     public String getEncrypt(String source, String salt) {
