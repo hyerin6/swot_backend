@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 3. 비밀번호 변경
  */
 @RestController
-@RequestMapping(value = "/auth/user")
+@RequestMapping(value = "/api/auth")
 public class UserAuthController {
 
     @Autowired
