@@ -1,12 +1,11 @@
 package kr.devdogs.swot.user.controller;
 
-import kr.devdogs.swot.security.jwt.JwtServiceImpl;
+import kr.devdogs.swot.security.jwt.JwtService;
 import kr.devdogs.swot.user.dto.User;
 import kr.devdogs.swot.user.service.UserAuthService;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 /* USER
@@ -21,7 +20,7 @@ public class UserAuthController {
     @Autowired
     private UserAuthService userAuthService;
     @Autowired
-    private JwtServiceImpl jwtServiceImpl;
+    private JwtService jwtService;
 
     // 회원가입
     @RequestMapping(value="/signup", method=RequestMethod.POST)
@@ -45,7 +44,7 @@ public class UserAuthController {
 
         if(userAuthService.userSignup(user)) {
             JSON.put("statusCode", HttpStatus.OK);
-            JSON.put("statusMsg", "SignUp Success");
+            JSON.put("statusMsg", "success");
             return JSON;
         }else{
             JSON.put("statusCode", "520");
@@ -66,12 +65,12 @@ public class UserAuthController {
             return JSON;
         }
 
-        User currentMember = userAuthService.userSignin(user);
-        if(currentMember != null) {
+        User currentUser = userAuthService.userSignin(user);
+        if(currentUser != null) {
             JSON.put("statusCode", HttpStatus.OK);
-            JSON.put("statusMsg", "SignIn Success");
-            JSON.put("accessToken", jwtServiceImpl.accessToken(user.getEmail()));
-            JSON.put("refreshToken", currentMember.getRefreshToken());
+            JSON.put("statusMsg", "success");
+            JSON.put("accessToken", jwtService.accessToken(user.getEmail()));
+            JSON.put("refreshToken", currentUser.getRefreshToken());
             return JSON;
         } else {
             JSON.put("statusCode", "520");
@@ -79,15 +78,5 @@ public class UserAuthController {
             return JSON;
         }
     }
-
-    @RequestMapping(value="/test", method = RequestMethod.GET)
-    public JSONObject test(@RequestParam String id){
-        JSONObject JSON = new JSONObject();
-        JSON.put("id", id);
-        System.out.println(JSON);
-        return JSON;
-
-    }
-
 
 }

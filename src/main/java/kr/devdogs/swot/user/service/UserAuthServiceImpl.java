@@ -43,7 +43,7 @@ public class UserAuthServiceImpl implements UserAuthService{
         int insertedLine = userMapper.signUp(user);
         if(insertedLine == 1) return true;
         else {
-            LOG.error("USER SignUp Fail : " + user.toString());
+            LOG.error("USER Signup Fail : " + user.toString());
             return false;
         }
     }
@@ -51,18 +51,17 @@ public class UserAuthServiceImpl implements UserAuthService{
     // 로그인
     @Override
     public User userSignin(User user){
-        /*String pw = user.getPassword();
+        String pw = user.getPassword();
         try {
             pw = sha256Util.getEncrypt(pw, sha256Util.generateSalt());
         } catch(Exception e) {
             LOG.error("Password Enctypt Fail - Password : " + pw);
         }
         user.setPassword(pw);
-         */
 
-        // refreshToken은 USER 디비에 저장한다.
-        String refreshToken = jwtServiceImpl.refreshToken(user.getEmail());
-        user.setRefreshToken(refreshToken);
+        // refresh token은 USER 디비에 저장한다.
+        user.setRefreshToken(jwtServiceImpl.refreshToken(user.getEmail()));
+        userMapper.refreshTokenUpdate(user);
 
         User currentUser = userMapper.userSignIn(user);
         return currentUser;
@@ -77,14 +76,6 @@ public class UserAuthServiceImpl implements UserAuthService{
             return false;
         else
             return true;
-    }
-
-    @Override
-    public int test(User user){
-        user.setUid("test");
-        int result = userMapper.signUp(user);
-        if(result == 1) return 1;
-        else return 0;
     }
 
 }

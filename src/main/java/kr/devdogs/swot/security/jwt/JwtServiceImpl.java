@@ -11,9 +11,9 @@ import java.util.Date;
 public class JwtServiceImpl implements JwtService{
 
     private static final Logger LOG = LogManager.getLogger(JwtServiceImpl.class);
-    private static final String SALT = "secret";
+    private static final String SALT = "swotSecret";
 
-    // access
+    // access token 생성
     @Override
     public String accessToken(String subject) {
         Date Now = new Date();
@@ -26,6 +26,7 @@ public class JwtServiceImpl implements JwtService{
         return jwt;
     }
 
+    // refresh token 생성
     @Override
     public String refreshToken(String subject) {
         Date Now = new Date();
@@ -38,6 +39,7 @@ public class JwtServiceImpl implements JwtService{
         return jwt;
     }
 
+    // token 검사
     @Override
     public int verifyToken(String token) {
         try{
@@ -51,7 +53,6 @@ public class JwtServiceImpl implements JwtService{
             return 701;
         }
     }
-
 
     // Token 해독 및 객체 생성
     @Override
