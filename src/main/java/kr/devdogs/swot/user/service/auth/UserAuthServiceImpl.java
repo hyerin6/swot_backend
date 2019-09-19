@@ -5,8 +5,6 @@ import kr.devdogs.swot.user.dto.User;
 import kr.devdogs.swot.user.mapper.UserMapper;
 import kr.devdogs.swot.user.service.mail.MailService;
 import kr.devdogs.swot.util.SHA256Util;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +18,6 @@ public class UserAuthServiceImpl implements UserAuthService{
     @Autowired private JwtServiceImpl jwtServiceImpl;
     @Autowired private MailService mailService;
 
-    private static final Logger LOG = LogManager.getLogger(UserAuthServiceImpl.class);
-
     // 회원가입
     @Override
     public boolean userSignup(User user){
@@ -30,7 +26,7 @@ public class UserAuthServiceImpl implements UserAuthService{
         try {
             pw = sha256Util.getEncrypt(pw, sha256Util.generateSalt());
         } catch(Exception e) {
-            LOG.error("password 암호화 실패", e);
+            //LOG.error("password 암호화 실패", e);
             return false;
         }
         user.setPassword(pw);
@@ -43,7 +39,7 @@ public class UserAuthServiceImpl implements UserAuthService{
         int insertedLine = userMapper.signUp(user);
         if(insertedLine == 1) return true;
         else {
-            LOG.error("USER Signup Fail : " + user.toString());
+            //LOG.error("USER Signup Fail : " + user.toString());
             return false;
         }
     }
@@ -55,7 +51,7 @@ public class UserAuthServiceImpl implements UserAuthService{
         try {
             pw = sha256Util.getEncrypt(pw, sha256Util.generateSalt());
         } catch(Exception e) {
-            LOG.error("Password Enctypt Fail - Password : " + pw);
+            //LOG.error("Password Enctypt Fail - Password : " + pw);
         }
         user.setPassword(pw);
 
