@@ -1,16 +1,18 @@
 package kr.devdogs.swot.security.jwt;
 
 import io.jsonwebtoken.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
-@Service("jwtService")
-public class JwtServiceImpl implements JwtService{
+import static kr.devdogs.swot.security.jwt.JwtService.Result.SUCCESS;
+import static kr.devdogs.swot.security.jwt.JwtService.Result.INVALID;
+import static kr.devdogs.swot.security.jwt.JwtService.Result.EXPIRED;
 
-    private static final Logger LOG = LogManager.getLogger(JwtServiceImpl.class);
+@Service("jwtService")
+@Slf4j
+public class JwtServiceImpl implements JwtService{
     private static final String SALT = "swotSecret";
 
     // access token 생성
@@ -41,23 +43,24 @@ public class JwtServiceImpl implements JwtService{
 
     // token 검사
     @Override
-    public int verifyToken(String token) {
+    public Result verifyToken(String token) {
         try{
             Jwts.parser().setSigningKey(SALT).parseClaimsJws(token).getBody();
-            return 200;
+            return SUCCESS;
         }catch (ExpiredJwtException e) {
-            LOG.error("유효기간이 지난 token을 사용했습니다.", e);
-            return 700;
+            log.error("토큰 틀려쪄", e);
+            return EXPIRED;
         } catch (JwtException e) {
-            LOG.error("jwt error..", e);
-            return 701;
+            log.error("토큰 틀려쪄", e);
+            return INVALID;
         }
     }
 
     // Token 해독 및 객체 생성
     @Override
     public String decode(String token) {
-        Claims Claim = Jwts.parser().setSigningKey(SALT).parseClaimsJws(token).getBody();
-        return Claim.getSubject();
+        Claims claim = Jwts.parser().setSigningKey(SALT).parseClaimsJws(token).getBody();
+        String subject = claim.getSubject();
+        return subject;
     }
 }

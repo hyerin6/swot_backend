@@ -1,4 +1,4 @@
-package kr.devdogs.swot.user.service;
+package kr.devdogs.swot.user.service.auth;
 
 import kr.devdogs.swot.security.jwt.JwtServiceImpl;
 import kr.devdogs.swot.user.dto.User;
@@ -24,7 +24,7 @@ public class UserAuthServiceImpl implements UserAuthService{
         String pw = user.getPassword();
         String email = user.getEmail();
         try {
-            pw = sha256Util.getEncrypt(pw, sha256Util.generateSalt());
+            pw = sha256Util.getEncrypt(pw);
         } catch(Exception e) {
             //LOG.error("password 암호화 실패", e);
             return false;
@@ -49,16 +49,14 @@ public class UserAuthServiceImpl implements UserAuthService{
     public User userSignin(User user){
         String pw = user.getPassword();
         try {
-            pw = sha256Util.getEncrypt(pw, sha256Util.generateSalt());
+            pw = sha256Util.getEncrypt(pw);
         } catch(Exception e) {
             //LOG.error("Password Enctypt Fail - Password : " + pw);
         }
+        // 암호화된 패스워드로 변경
         user.setPassword(pw);
 
-        // refresh token은 USER 디비에 저장한다.
-        user.setRefreshToken(jwtServiceImpl.refreshToken(user.getEmail()));
-        userMapper.refreshTokenUpdate(user);
-
+        // user가 있는지 디비에서 조회
         User currentUser = userMapper.userSignIn(user);
         return currentUser;
     }
@@ -72,6 +70,31 @@ public class UserAuthServiceImpl implements UserAuthService{
             return false;
         else
             return true;
+    }
+
+    // tempPassword DB에 저장
+    @Override
+    public boolean tempPasswordUpdate(User user){
+        // email이랑 tempPassword 포함되어있어야함
+        String tempPassword = user.getTempPassword();
+        try {
+            tempPassword = sha256Util.getEncrypt(tempPassword);
+        } catch(Exception e) {
+            //LOG.error("password 암호화 실패", e);
+            return false;
+        }
+        user.setTempPassword(tempPassword);
+
+        // 이메일 전송 후, token은 디비에 저장
+        String token = mailService.send(user.getEmail());
+        user.setCertToken(token);
+
+        // certToken, state, tempPassword 는 새로운 값으로 변경해주고
+        // password 는 NULL 값으로 바꿔준다.
+        int result = userMapper.tempPasswordUpdate(user);
+
+        if(result == 1) return true;
+        else return false;
     }
 
 }

@@ -3,16 +3,23 @@ package kr.devdogs.swot.config;
 import kr.devdogs.swot.security.jwt.JwtInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.*;
 
 import java.util.Arrays;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    private String[] exclude = new String[]{"/auth/user/*", "/static/*", "/error", "/test/*", "/static/*", "/api/cert/*"};
+    private String[] exclude = new String[]{
+            "/static/*",
+            "/error",
+            "/test/*",
+            "/api/auth/user/*",
+            "/api/auth/manager/*",
+            "/api/auth/*",
+            "/"
+    };
+
     @Autowired private JwtInterceptor jwtInterceptor;
 
     @Override
@@ -27,4 +34,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/static/**")
                 .addResourceLocations("classpath:/static/");
     }
+
+
 }
