@@ -31,8 +31,8 @@ public class UserController {
     public ResponseEntity<Map<String, Object>> getMyInfo(HttpServletRequest req){
         Map<String, Object> res = new HashMap<String, Object>();
 
-        String email = (String) req.getAttribute("session");
-        User currentUser = userService.getUser(email);
+        String uid = (String) req.getAttribute("session");
+        User currentUser = userService.getUser(uid);
 
         if(currentUser != null){
             res.put("result", "success");
@@ -48,9 +48,9 @@ public class UserController {
     public ResponseEntity<Map<String, Object>> userWithdraw(HttpServletRequest req){
         Map<String, Object> res = new HashMap<String, Object>();
 
-        String email = (String) req.getAttribute("session");
+        String uid = (String) req.getAttribute("session");
 
-        boolean result = userService.withdraw(email);
+        boolean result = userService.withdraw(uid);
         if(result){
             res.put("result", "success");
         }else{

@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
-// 관리자 마이페이지(아직 필요없음), 예약 관리
+// 관리자 마이페이지
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("/api/manager")

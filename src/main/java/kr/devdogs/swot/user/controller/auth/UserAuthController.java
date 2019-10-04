@@ -66,8 +66,7 @@ public class UserAuthController {
         User currentUser = userAuthService.userSignin(user);
         if(currentUser != null) {
             res.put("result", "success");
-            res.put("accessToken", jwtService.accessToken(user.getEmail()));
-            res.put("refreshToken", jwtService.refreshToken(user.getEmail()));
+            res.put("accessToken", jwtService.accessToken(currentUser.getUid()));
         } else {
             res.put("result", "fail");
             res.put("error", "Unknown Error");

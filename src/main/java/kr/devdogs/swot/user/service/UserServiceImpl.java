@@ -7,19 +7,18 @@ import org.springframework.stereotype.Service;
 
 @Service("userService")
 public class UserServiceImpl implements UserService{
-    @Autowired User user;
     @Autowired UserMapper userMapper;
 
     // myinfo
     @Override
-    public User getUser(String email){
-        return userMapper.getUser(email);
+    public User getUser(String uid){
+        return userMapper.getUser(uid);
     }
 
     // withdraw
     @Override
-    public boolean withdraw(String email){
-        int result = userMapper.withdraw(email);
+    public boolean withdraw(String uid){
+        int result = userMapper.withdraw(uid);
         if(result == 1) return true;
         else return false;
     }
@@ -28,7 +27,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public User modifyMyinfo(User user){
         userMapper.userInfoUpdate(user);
-        User modifyUser = userMapper.getUser(user.getEmail());
+        User modifyUser = userMapper.getUser(user.getUid());
         return modifyUser;
     }
 

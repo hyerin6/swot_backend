@@ -33,16 +33,16 @@ public interface UserMapper {
     public int passwordUpdate(String certToken);
 
     // 특정 유저 정보 조회
-    @Select("SELECT * from user WHERE email = #{email}")
-    public User getUser(String email);
+    @Select("SELECT * from user WHERE uid = #{uid}")
+    public User getUser(String uid);
 
     // 회원 탈퇴
-    @Update("UPDATE user SET state = 'D', updatedDate = now() WHERE email = #{email}")
-    public int withdraw(String email);
+    @Update("UPDATE user SET state = 'D', updatedDate = now() WHERE uid = #{uid}")
+    public int withdraw(String uid);
 
     // 유저 정보 업데이트 - 이름, 상태메시지, 학번만 변경할 수 있다.
     @Update("UPDATE user SET name = #{name}, statusMsg = #{statusMsg}, major_no = #{major_no}, updatedDate = now() " +
-            "WHERE email = #{email}")
+            "WHERE uid = #{uid}")
     public int userInfoUpdate(User user);
 
 }

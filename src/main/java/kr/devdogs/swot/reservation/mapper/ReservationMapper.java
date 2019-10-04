@@ -7,5 +7,7 @@ import java.util.List;
 
 @Mapper
 public interface ReservationMapper {
+    public boolean createReservation(Reservation reservation);
+    public boolean deleteReservation(Reservation reservation);
     public List<Reservation> findByUserId(String userId);
 }

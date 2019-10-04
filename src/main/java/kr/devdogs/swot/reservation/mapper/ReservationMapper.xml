@@ -3,7 +3,17 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.devdogs.swot.reservation.mapper.ReservationMapper">
+
+    <insert id="createReservation">
+        INSERT INTO reservation (uid, roomId, userId, reason, phone, total,
+        startTime, endTime, dt, state, createDate, updatedDate)
+        VALUES(#{uid}, #{roomId}, #{userId}, #{reason}, #{phone}, #{total},
+        #{startTime}, #{endTime}, #{dt}, 'D', #{state}, now(), now())
+    </insert>
+
     <select id="findByUserId" resultType="kr.devdogs.swot.reservation.dto.Reservation">
-        SELECT * FROM reservation WHERE userId = #{userId}
+        SELECT * FROM reservation
+        WHERE userId = #{userId}
+        AND dt >= now()
     </select>
 </mapper>

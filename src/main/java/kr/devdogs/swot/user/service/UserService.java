@@ -8,7 +8,7 @@ public interface UserService {
     public User getUser(String uid);
 
     // withdraw
-    public boolean withdraw(String email);
+    public boolean withdraw(String uid);
 
     // modifyMyinfo
     public User modifyMyinfo(User user);
