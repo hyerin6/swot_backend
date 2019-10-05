@@ -39,6 +39,7 @@ public class UserController {
             res.put("info", currentUser);
         }else{
             res.put("result", "fail");
+            res.put("error", "Unknown Error");
         }
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
@@ -53,25 +54,30 @@ public class UserController {
         boolean result = userService.withdraw(uid);
         if(result){
             res.put("result", "success");
+
         }else{
             res.put("result", "fail");
+            res.put("error", "Unknown Error");
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     // 회원 정보 수정
     @RequestMapping(value="modifyMyinfo", method=RequestMethod.POST)
-    public ResponseEntity<Map<String, Object>> userInfoUpdate(User user){
+    public ResponseEntity<Map<String, Object>> userInfoUpdate(HttpServletRequest req, User user){
         Map<String, Object> res = new HashMap<String, Object>();
 
+        String uid = (String) req.getAttribute("session");
+        user.setUid(uid);
         User currentUser = userService.modifyMyinfo(user);
         if(currentUser != null){
             res.put("result", "success");
             res.put("info", currentUser);
         }else{
             res.put("result", "fail");
+            res.put("error", "Unknown Error");
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
 }

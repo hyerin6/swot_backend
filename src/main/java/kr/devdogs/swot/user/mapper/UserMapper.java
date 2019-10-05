@@ -20,7 +20,7 @@ public interface UserMapper {
     public int emailCert(String certToken);
 
     // 이메일 중복 체크
-    @Select("SELECT email FROM user WHERE email = #{email}")
+    @Select("SELECT email FROM user WHERE email = #{email} AND NOT state='D'")
     public String emailDuplicate(User user);
 
     // 비밀번호 변경을 위한 tempPassword 저장 및 state(미인증) 변경

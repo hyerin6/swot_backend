@@ -14,7 +14,6 @@ public class Classroom {
     String room_no; // 예) m301
     char state; // T:예약가능, D:예약불가능
     int total; // 수용 가능 인원수
-    String reservationId;
     Date createdDate;
     Date updatedDate;
 }

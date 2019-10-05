@@ -26,9 +26,12 @@ public class UserServiceImpl implements UserService{
     // modifyMyinfo - 이름, 상태 메시지, 학번만 변경할 수 있다.
     @Override
     public User modifyMyinfo(User user){
-        userMapper.userInfoUpdate(user);
-        User modifyUser = userMapper.getUser(user.getUid());
-        return modifyUser;
+        int result = userMapper.userInfoUpdate(user);
+        if(result == 1) {
+            User modifyUser = userMapper.getUser(user.getUid());
+            return modifyUser;
+        }
+        else return null;
     }
 
 }

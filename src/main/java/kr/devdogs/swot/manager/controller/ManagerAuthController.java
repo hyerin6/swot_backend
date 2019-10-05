@@ -27,7 +27,7 @@ public class ManagerAuthController {
         Map<String, Object> res = new HashMap<String, Object>();
         if(manager.getId() == null ||
                 manager.getPassword() == null){
-            res.put("error", "ID, Password is Required");
+            res.put("error", "id, Password is Required");
             return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
         }
 
@@ -39,7 +39,7 @@ public class ManagerAuthController {
             res.put("result", "fail");
             res.put("error", "Unknown Error");
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
 }
