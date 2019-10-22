@@ -27,12 +27,12 @@ public class UserController {
     @Autowired UserService userService;
 
     // 마이페이지
-    @RequestMapping(value ="myinfo", method=RequestMethod.GET)
-    public ResponseEntity<Map<String, Object>> getMyInfo(HttpServletRequest req){
+    @RequestMapping(value ="myInfo", method=RequestMethod.GET)
+    public ResponseEntity<Map<String, Object>> findByUserInfo(HttpServletRequest req){
         Map<String, Object> res = new HashMap<String, Object>();
 
-        String uid = (String) req.getAttribute("session");
-        User currentUser = userService.getUser(uid);
+        int id = (int) req.getAttribute("session");
+        User currentUser = userService.findByUserId(id);
 
         if(currentUser != null){
             res.put("result", "success");
@@ -49,12 +49,11 @@ public class UserController {
     public ResponseEntity<Map<String, Object>> userWithdraw(HttpServletRequest req){
         Map<String, Object> res = new HashMap<String, Object>();
 
-        String uid = (String) req.getAttribute("session");
+        int id = (int) req.getAttribute("session");
 
-        boolean result = userService.withdraw(uid);
+        boolean result = userService.withdraw(id);
         if(result){
             res.put("result", "success");
-
         }else{
             res.put("result", "fail");
             res.put("error", "Unknown Error");
@@ -63,13 +62,12 @@ public class UserController {
     }
 
     // 회원 정보 수정
-    @RequestMapping(value="modifyMyinfo", method=RequestMethod.POST)
+    @RequestMapping(value="modifyMyInfo", method=RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> userInfoUpdate(HttpServletRequest req, User user){
         Map<String, Object> res = new HashMap<String, Object>();
-
-        String uid = (String) req.getAttribute("session");
-        user.setUid(uid);
-        User currentUser = userService.modifyMyinfo(user);
+        int id = (int) req.getAttribute("session");
+        user.setId(id);
+        User currentUser = userService.modifyUserInfo(user);
         if(currentUser != null){
             res.put("result", "success");
             res.put("info", currentUser);

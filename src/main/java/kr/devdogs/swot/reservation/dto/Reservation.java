@@ -4,14 +4,14 @@ import lombok.Data;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Time;
-import java.util.Date;
+import java.sql.Date;
 
 @Data
 @Repository
 public class Reservation {
-    String uid;
-    String roomId;
-    String userId;
+    int id;
+    int roomId;
+    int userId;
     String reason; // 예약 사유
     String phone; // 사용자 전화번호
     int total; // 신청하는 총 인원수

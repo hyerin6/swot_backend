@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.devdogs.swot.classroom.mapper.ClassroomMapper">
+
+    <insert id="create" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO classroom
+        (groupName, groupNo, roomNo, state, total, createdDate, updatedDate)
+        VALUES (#{groupName}, #{groupNo}, #{roomNo}, 'T', #{total}, now(), now())
+    </insert>
+
+    <select id="findById" resultType="kr.devdogs.swot.classroom.dto.Classroom">
+        SELECT * FROM classroom
+        WHERE id = #{id} AND state NOT LIKE 'D'
+    </select>
+
+    <select id="readAll" resultType="kr.devdogs.swot.classroom.dto.Classroom">
+        SELECT * FROM classroom WHERE state NOT LIKE 'D'
+    </select>
+
+    <update id="modify" >
+        UPDATE classroom
+        SET groupName = #{groupName}, groupNo =#{groupNo}, roomNo = #{roomNo}, state = #{state}
+        WHERE id = {id}
+    </update>
+
+    <update id="delete" >
+        UPDATE classroom SET state = 'D'
+        WHERE id = {id}
+    </update>
+</mapper>

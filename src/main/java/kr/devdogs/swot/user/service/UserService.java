@@ -5,12 +5,12 @@ import kr.devdogs.swot.user.dto.User;
 public interface UserService {
 
     // myinfo
-    public User getUser(String uid);
+    public User findByUserId(int id);
 
     // withdraw
-    public boolean withdraw(String uid);
+    public boolean withdraw(int id);
 
-    // modifyMyinfo
-    public User modifyMyinfo(User user);
+    // modifyUserInfo
+    public User modifyUserInfo(User user);
 
 }

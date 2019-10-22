@@ -17,7 +17,7 @@ public class MailServiceImpl implements MailService{
     JavaMailSender emailSender;
 
     @Override
-    public String send(String email){
+    public String send(String email, int cert){
         char[] charaters = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1','2','3','4','5','6','7','8','9'};
         StringBuffer sb = new StringBuffer();
         // 토큰 생성
@@ -31,21 +31,29 @@ public class MailServiceImpl implements MailService{
         MimeMessageHelper helper;
         try {
             helper = new MimeMessageHelper(msg, false, "UTF-8");
-            String text = "<html><body><p>인증을 위해 아래 링크를 클릭해 주세요.</p>" +
-                    "<p>이메일 인증 후 로그인이 가능합니다.</p>" +
-                    "<a href='http://swot.devdogs.kr:8080/api/auth/cert?&certToken=" + token + "'>여기를 눌러 인증해주세요</a></body></html>";
+            String text = "";
+            if(cert == 1){ // 회원가입
+                text = "<html><body><p>인증을 위해 아래 링크를 클릭해 주세요.</p>" +
+                        "<p>이메일 인증 후 로그인이 가능합니다.</p>" +
+                        "<a href='http://swot.devdogs.kr:8080/api/auth/cert/singUp?&token=" + token + "'>여기를 눌러 인증을 완료해주세요.</a></body></html>";
+            } else if(cert == 2){ // 비밀번호 변경
+                text = "<html><body><p>인증을 위해 아래 링크를 클릭해 주세요.</p>" +
+                        "<p>이메일 인증 후 로그인이 가능합니다.</p>" +
+                        "<a href='http://swot.devdogs.kr:8080/api/auth/cert/modifyPw?&token=" + token + "'>여기를 눌러 인증을 완료해주세요.</a></body></html>";
+            }
             helper.setTo(email);
             helper.setSubject("SWOT 인증 메일입니다.");
-            helper.setText(text,true);
+            helper.setText(text, true);
             emailSender.send(msg);
         } catch (MessagingException e) {
-            // 에러 LOG는 나중에 처리
-            // LOG.error("Internal server Error", e);
+            // LOG.error("Error", e);
         } catch (MailAuthenticationException e){
-
+            //LOG.error("Error", e);
         } catch (HttpServerErrorException.InternalServerError e){
-            System.out.println(e);
+            //LOG.error("Error", e);
         }
         return token;
     }
+
+
 }

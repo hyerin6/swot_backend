@@ -9,26 +9,26 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService{
     @Autowired UserMapper userMapper;
 
-    // myinfo
+    // my info
     @Override
-    public User getUser(String uid){
-        return userMapper.getUser(uid);
+    public User findByUserId(int id){
+        return userMapper.findByUserId(id);
     }
 
     // withdraw
     @Override
-    public boolean withdraw(String uid){
-        int result = userMapper.withdraw(uid);
+    public boolean withdraw(int id){
+        int result = userMapper.withdraw(id);
         if(result == 1) return true;
         else return false;
     }
 
-    // modifyMyinfo - 이름, 상태 메시지, 학번만 변경할 수 있다.
+    // 이름, 상태 메시지, 학번만 변경
     @Override
-    public User modifyMyinfo(User user){
-        int result = userMapper.userInfoUpdate(user);
+    public User modifyUserInfo(User user){
+        int result = userMapper.modifyUserInfo(user);
         if(result == 1) {
-            User modifyUser = userMapper.getUser(user.getUid());
+            User modifyUser = userMapper.findByUserId(user.getId());
             return modifyUser;
         }
         else return null;

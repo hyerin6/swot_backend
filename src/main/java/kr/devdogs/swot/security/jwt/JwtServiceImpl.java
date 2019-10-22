@@ -17,12 +17,12 @@ public class JwtServiceImpl implements JwtService{
 
     // access token 생성
     @Override
-    public String accessToken(String subject) {
+    public String accessToken(int subject) {
         Date Now = new Date();
         Date expireTime = new Date(Now.getTime() + 1000 * 60 * 60 * 24 * 14);
         String jwt = Jwts.builder()
                 .setExpiration(expireTime)
-                .setSubject(subject)
+                .setSubject(Integer.toString(subject))
                 .signWith(SignatureAlgorithm.HS256, SALT)
                 .compact();
         return jwt;
@@ -48,19 +48,19 @@ public class JwtServiceImpl implements JwtService{
             Jwts.parser().setSigningKey(SALT).parseClaimsJws(token).getBody();
             return SUCCESS;
         }catch (ExpiredJwtException e) {
-            log.error("토큰 틀려쪄", e);
+            log.error("토큰 틀렸습니다.", e);
             return EXPIRED;
         } catch (JwtException e) {
-            log.error("토큰 틀려쪄", e);
+            log.error("토큰 틀렸습니다.", e);
             return INVALID;
         }
     }
 
     // Token 해독 및 객체 생성
     @Override
-    public String decode(String token) {
+    public int decode(String token) {
         Claims claim = Jwts.parser().setSigningKey(SALT).parseClaimsJws(token).getBody();
         String subject = claim.getSubject();
-        return subject;
+        return Integer.parseInt(subject);
     }
 }

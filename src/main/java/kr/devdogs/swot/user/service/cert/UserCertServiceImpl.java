@@ -8,26 +8,25 @@ import org.springframework.stereotype.Service;
 public class UserCertServiceImpl implements UserCertService{
     @Autowired private UserMapper userMapper;
 
-    // 회원가입 인증
+    // 이메일 인증
     @Override
-    public boolean emailCert(String certToken){
-        int result = userMapper.emailCert(certToken);
+    public boolean emailCert(String token){
+        int result = userMapper.emailCert(token);
         if(result == 1){
-
             return true;
+        } else {
+            return false;
         }
-        else return false;
     }
 
-    // 비밀번호 변경 인증
-    @Override
-    public boolean emailCert2(String certToken){
-        int result = userMapper.passwordUpdate(certToken);
-        if(result == 1){
+    // 회원가입 이메일 인증 성공
+    public void successSignUpCert(String token){
+        userMapper.emailCert(token);
+    }
 
-            return true;
-        }
-        else return false;
+    // 비밀번호 변경 이메일 인증 성공
+    public void successModifyPwCert(String token){
+        userMapper.modifyPw(token);
     }
 
 }

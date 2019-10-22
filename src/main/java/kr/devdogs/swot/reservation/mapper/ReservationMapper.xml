@@ -4,16 +4,38 @@
 
 <mapper namespace="kr.devdogs.swot.reservation.mapper.ReservationMapper">
 
-    <insert id="createReservation">
-        INSERT INTO reservation (uid, roomId, userId, reason, phone, total,
-        startTime, endTime, dt, state, createDate, updatedDate)
-        VALUES(#{uid}, #{roomId}, #{userId}, #{reason}, #{phone}, #{total},
-        #{startTime}, #{endTime}, #{dt}, 'D', #{state}, now(), now())
+    <insert id="create" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO reservation(roomId, userId, reason, phone, total, startTime, endTime, dt, state, createdDate, updatedDate)
+        VALUES (#{roomId}, #{userId}, #{reason}, #{phone}, #{total}, #{startTime}, #{endTime}, #{dt}, 'T', now(), now())
     </insert>
 
-    <select id="findByUserId" resultType="kr.devdogs.swot.reservation.dto.Reservation">
-        SELECT * FROM reservation
-        WHERE userId = #{userId}
-        AND dt >= now()
+
+    <select id="findById" resultType="kr.devdogs.swot.reservation.mapper.ReservationMapper">
+        SELECT * from reservation WHERE id = #{id} AND dt > now()
     </select>
+
+    <update id="delete">
+        UPDATE reservation SET state = 'D' WHERE id = #{id}
+    </update>
+
+    <select id="findByUserId" resultType="kr.devdogs.swot.reservation.mapper.ReservationMapper">
+        SELECT * from reservation WHERE userId = #{userId} AND dt > now()
+    </select>
+
+    <select id="findByRoomId" resultType="kr.devdogs.swot.reservation.mapper.ReservationMapper">
+        SELECT * from reservation WHERE roomId = #{roomId} AND dt > now()
+    </select>
+
+    <select id="readAll" resultType="kr.devdogs.swot.reservation.mapper.ReservationMapper">
+        SELECT * from reservation WHERE dt > now()
+    </select>
+
+    <update id="accept" >
+        UPDATE reservation SET state = 'T' WHERE id = #{id}
+    </update>
+
+    <update id="decline" >
+        UPDATE reservation SET state = 'D' WHERE id = #{id}
+    </update>
+
 </mapper>

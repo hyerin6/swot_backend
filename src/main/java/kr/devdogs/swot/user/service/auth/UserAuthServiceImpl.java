@@ -8,8 +8,6 @@ import kr.devdogs.swot.util.SHA256Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 @Service("userAuthService")
 public class UserAuthServiceImpl implements UserAuthService{
 
@@ -20,8 +18,8 @@ public class UserAuthServiceImpl implements UserAuthService{
 
     // 회원가입
     @Override
-    public boolean userSignup(User user){
-        String pw = user.getPassword();
+    public boolean userSignUp(User user){
+        String pw = user.getPw();
         String email = user.getEmail();
         try {
             pw = sha256Util.getEncrypt(pw);
@@ -29,34 +27,32 @@ public class UserAuthServiceImpl implements UserAuthService{
             //LOG.error("password 암호화 실패", e);
             return false;
         }
-        user.setPassword(pw);
+        user.setPw(pw);
 
-        // 이메일 전송 후, token은 디비에 저장
-        String token = mailService.send(email);
-        user.setCertToken(token);
+        // 이메일 전송 후, token 은 디비에 저장
+        String token = mailService.send(email, 1);
+        user.setToken(token);
 
-        user.setUid(UUID.randomUUID().toString());
         int insertedLine = userMapper.signUp(user);
-        if(insertedLine == 1) return true;
-        else {
-            //LOG.error("USER Signup Fail : " + user.toString());
+        if(insertedLine == 1){
+            return true;
+        } else {
+            //LOG.error("");
             return false;
         }
     }
 
     // 로그인
     @Override
-    public User userSignin(User user){
-        String pw = user.getPassword();
+    public User userSignIn(User user){
+        String pw = user.getPw();
         try {
             pw = sha256Util.getEncrypt(pw);
         } catch(Exception e) {
-            //LOG.error("Password Enctypt Fail - Password : " + pw);
+            //LOG.error("");
         }
-        // 암호화된 패스워드로 변경
-        user.setPassword(pw);
+        user.setPw(pw);
 
-        // user가 있는지 디비에서 조회
         User currentUser = userMapper.userSignIn(user);
         return currentUser;
     }
@@ -66,35 +62,35 @@ public class UserAuthServiceImpl implements UserAuthService{
     public boolean isEmailDuplicate(User user){
         String selectString = userMapper.emailDuplicate(user);
 
-        if(selectString == null)
+        if(selectString == null) {
             return false;
-        else
+        } else {
             return true;
+        }
     }
 
-    // tempPassword DB에 저장
     @Override
-    public boolean tempPasswordUpdate(User user){
-        // email이랑 tempPassword 포함되어있어야함
-        String tempPassword = user.getTempPassword();
+    public boolean modifyPw(User user){
+        String modifyPw = user.getModifyPw();
         try {
-            tempPassword = sha256Util.getEncrypt(tempPassword);
+            modifyPw = sha256Util.getEncrypt(modifyPw);
         } catch(Exception e) {
             //LOG.error("password 암호화 실패", e);
             return false;
         }
-        user.setTempPassword(tempPassword);
+        user.setModifyPw(modifyPw);
 
-        // 이메일 전송 후, token은 디비에 저장
-        String token = mailService.send(user.getEmail());
-        user.setCertToken(token);
+        // 이메일 전송 후, token 은 디비에 저장
+        String token = mailService.send(user.getEmail(), 2);
+        user.setToken(token);
 
-        // certToken, state, tempPassword 는 새로운 값으로 변경해주고
-        // password 는 NULL 값으로 바꿔준다.
-        int result = userMapper.tempPasswordUpdate(user);
+        int updatedLine = userMapper.modifyPwUpdate(user);
 
-        if(result == 1) return true;
-        else return false;
+        if(updatedLine == 1){
+            return true;
+        } else{
+            return false;
+        }
     }
 
 }

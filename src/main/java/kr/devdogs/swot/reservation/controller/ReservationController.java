@@ -2,9 +2,11 @@ package kr.devdogs.swot.reservation.controller;
 
 import kr.devdogs.swot.reservation.dto.Reservation;
 import kr.devdogs.swot.reservation.service.ReservationService;
+import kr.devdogs.swot.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,36 +28,101 @@ import java.util.Map;
 public class ReservationController {
 
     @Autowired ReservationService reservationService;
+    @Autowired UserService userService;
 
     // user - 강의실 예약
-    @RequestMapping(value="create", method=RequestMethod.GET)
-    public ResponseEntity<Map<String, Object>> createReservation(HttpServletRequest req, Reservation reservation) {
+    @RequestMapping(value="create/{roomId}", method=RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> create(HttpServletRequest req,
+                                                      @PathVariable("roomId") int roomId,
+                                                      Reservation reservation) {
         Map<String, Object> res = new HashMap<String, Object>();
 
-        String userUid = (String) req.getAttribute("session");
-        reservation.setUserId(userUid);
+        int userId = (int) req.getAttribute("session");
 
-        boolean result = reservationService.createReservation(reservation);
+        reservation.setRoomId(roomId);
+        reservation.setUserId(userId);
 
-        if(result) {
+        int id = reservationService.create(reservation);
+        Reservation currentReservation = reservationService.findById(id);
+
+        if(reservation != null) {
             res.put("result", "success");
+            res.put("info", currentReservation);
         } else {
             res.put("result", "fail");
             res.put("error", "Unknown Error");
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     // 특정 사용자 예약 목록 조회 (userId)
     @RequestMapping(value="MyReserved", method=RequestMethod.GET)
     public ResponseEntity<Map<String, Object>> userByList(HttpServletRequest req){
         Map<String, Object> res = new HashMap<String, Object>();
-        String uid = (String) req.getAttribute("session");
-        List<Reservation> reservations = reservationService.findByUserId(uid);
 
+        int userId = (int) req.getAttribute("session");
 
+        List<Reservation> reservations = reservationService.findByUserId(userId);
+        res.put("result", "success");
+        res.put("info", reservations);
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
 
-        return new ResponseEntity<>(HttpStatus.OK);
+    // 특정 강의실 예약 목록 조회
+    @RequestMapping(value="roomReserved/{roomId}", method=RequestMethod.GET)
+    public ResponseEntity<Map<String, Object>> roomByList(@PathVariable("roomId") int roomId){
+        Map<String, Object> res = new HashMap<String, Object>();
+        List<Reservation> reservations = reservationService.findByRoomId(roomId);
+        res.put("result", "success");
+        res.put("info", reservations);
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    // 사용자 - 예약 삭제
+    @RequestMapping(value="delete/{id}", method=RequestMethod.GET)
+    public ResponseEntity<Map<String, Object>> delete(HttpServletRequest req, @PathVariable("id") int id){
+        Map<String, Object> res = new HashMap<String, Object>();
+        int userId = (int) req.getAttribute("session");
+        int updatedLine = reservationService.delete(id);
+        if(updatedLine == 1){
+            res.put("result", "success");
+        } else {
+            res.put("result", "fail");
+            res.put("error", "Unknown Error");
+        }
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    // 관리자 - 예약 수락
+    @RequestMapping(value="accept/{id}", method=RequestMethod.GET)
+    public ResponseEntity<Map<String, Object>> accept(HttpServletRequest req, @PathVariable("id") int id){
+        Map<String, Object> res = new HashMap<String, Object>();
+        int managerId = (int) req.getAttribute("session");
+
+        int updatedLine = reservationService.accept(managerId, id);
+        if(updatedLine == 1){
+            res.put("result", "success");
+        } else {
+            res.put("result", "fail");
+            res.put("error", "Unknown Error");
+        }
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    // 관리자 - 예약 거절
+    @RequestMapping(value="decline/{id}", method=RequestMethod.GET)
+    public ResponseEntity<Map<String, Object>> decline(HttpServletRequest req, @PathVariable("id") int id){
+        Map<String, Object> res = new HashMap<String, Object>();
+        int managerId = (int) req.getAttribute("session");
+
+        int updatedLine = reservationService.decline(managerId, id);
+        if(updatedLine == 1){
+            res.put("result", "success");
+        } else {
+            res.put("result", "fail");
+            res.put("error", "Unknown Error");
+        }
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
 }

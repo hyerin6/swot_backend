@@ -11,12 +11,10 @@ import java.util.Arrays;
 public class WebMvcConfig implements WebMvcConfigurer {
 
     private String[] exclude = new String[]{
-            "/static/*",
+            "/static/**",
             "/error",
-            "/test/*",
-            "/api/auth/user/*",
-            "/api/auth/manager/*",
-            "/api/auth/*",
+            "/test/**",
+            "/api/auth/**",
             "/"
     };
 
@@ -35,5 +33,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addResourceLocations("classpath:/static/");
     }
 
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("*")
+                .allowedMethods("*");
+
+    }
 
 }

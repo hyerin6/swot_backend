@@ -9,4 +9,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/study/application")
 public class ApplicationController {
 
+
 }
