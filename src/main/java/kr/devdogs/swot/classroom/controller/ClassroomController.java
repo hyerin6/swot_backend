@@ -60,7 +60,7 @@ public class ClassroomController {
     }
 
     // 강의실 모든 Data 조회
-    @RequestMapping(value="classrooms", method= RequestMethod.POST)
+    @RequestMapping(value="classrooms", method= RequestMethod.GET)
     public ResponseEntity<Map<String, Object>> readAll(){
         Map<String, Object> res = new HashMap<String, Object>();
 
@@ -76,7 +76,7 @@ public class ClassroomController {
     }
 
     // 특정 강의실 Data 조회
-    @RequestMapping(value="{id}", method= RequestMethod.POST)
+    @RequestMapping(value="{id}", method= RequestMethod.GET)
     public ResponseEntity<Map<String, Object>> read(@PathVariable("id") int id){
         Map<String, Object> res = new HashMap<String, Object>();
 
@@ -91,12 +91,15 @@ public class ClassroomController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    // 강의실 정보 update - group, groupNo, roomNo, state, total
+    // 강의실 정보 update - groupName, groupNo, roomNo, state, total
     @RequestMapping(value="modify/{id}", method= RequestMethod.POST)
-    public ResponseEntity<Map<String, Object>> modify(@PathVariable("id") int id, HttpServletRequest req, Classroom classroom
-    ){
+    public ResponseEntity<Map<String, Object>> modify(@PathVariable("id") int id,
+                                                      HttpServletRequest req,
+                                                      Classroom classroom){
         Map<String, Object> res = new HashMap<String, Object>();
         int managerId = (int) req.getAttribute("session");
+
+        classroom.setId(id);
 
         Classroom currentClass = classroomService.modify(managerId, classroom);
 
@@ -111,7 +114,7 @@ public class ClassroomController {
     }
 
     // 특정 강의실 삭제
-    @RequestMapping(value="delete/{id}", method= RequestMethod.POST)
+    @RequestMapping(value="delete/{id}", method= RequestMethod.GET)
     public ResponseEntity<Map<String, Object>> delete(@PathVariable("id") int id, HttpServletRequest req){
         Map<String, Object> res = new HashMap<String, Object>();
         int managerId = (int) req.getAttribute("session");

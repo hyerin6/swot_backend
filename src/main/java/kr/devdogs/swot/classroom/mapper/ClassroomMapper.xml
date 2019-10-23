@@ -21,7 +21,7 @@
 
     <update id="modify" >
         UPDATE classroom
-        SET groupName = #{groupName}, groupNo =#{groupNo}, roomNo = #{roomNo}, state = #{state}
+        SET groupName = #{groupName}, groupNo = #{groupNo}, roomNo = #{roomNo}, state = #{state}, total = #{total}
         WHERE id = {id}
     </update>
 

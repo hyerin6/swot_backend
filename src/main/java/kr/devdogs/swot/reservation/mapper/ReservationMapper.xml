@@ -5,29 +5,28 @@
 <mapper namespace="kr.devdogs.swot.reservation.mapper.ReservationMapper">
 
     <insert id="create" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO reservation(roomId, userId, reason, phone, total, startTime, endTime, dt, state, createdDate, updatedDate)
-        VALUES (#{roomId}, #{userId}, #{reason}, #{phone}, #{total}, #{startTime}, #{endTime}, #{dt}, 'T', now(), now())
+        INSERT INTO reservation(roomId, userId, reason, phone, total, startTime, endTime, reservationDate, state, createdDate, updatedDate)
+        VALUES (#{roomId}, #{userId}, #{reason}, #{phone}, #{total}, #{startTime}, #{endTime}, #{reservationDate}, 'C', now(), now())
     </insert>
 
-
-    <select id="findById" resultType="kr.devdogs.swot.reservation.mapper.ReservationMapper">
-        SELECT * from reservation WHERE id = #{id} AND dt > now()
+    <select id="findById" resultType="kr.devdogs.swot.reservation.dto.Reservation">
+        SELECT * from reservation WHERE id = #{id} AND reservationDate > now()
     </select>
 
     <update id="delete">
         UPDATE reservation SET state = 'D' WHERE id = #{id}
     </update>
 
-    <select id="findByUserId" resultType="kr.devdogs.swot.reservation.mapper.ReservationMapper">
-        SELECT * from reservation WHERE userId = #{userId} AND dt > now()
+    <select id="findByUserId" resultType="kr.devdogs.swot.reservation.dto.Reservation">
+        SELECT * from reservation WHERE userId = #{userId} AND reservationDate > now()
     </select>
 
-    <select id="findByRoomId" resultType="kr.devdogs.swot.reservation.mapper.ReservationMapper">
-        SELECT * from reservation WHERE roomId = #{roomId} AND dt > now()
+    <select id="findByRoomId" resultType="kr.devdogs.swot.reservation.dto.Reservation">
+        SELECT * from reservation WHERE roomId = #{roomId} AND reservationDate > now()
     </select>
 
-    <select id="readAll" resultType="kr.devdogs.swot.reservation.mapper.ReservationMapper">
-        SELECT * from reservation WHERE dt > now()
+    <select id="readAll" resultType="kr.devdogs.swot.reservation.dto.Reservation">
+        SELECT * from reservation WHERE reservationDate > now()
     </select>
 
     <update id="accept" >

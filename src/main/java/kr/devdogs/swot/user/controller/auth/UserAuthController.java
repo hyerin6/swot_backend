@@ -45,6 +45,7 @@ public class UserAuthController {
         if(userAuthService.isEmailDuplicate(user)){
             res.put("result", "fail");
             res.put("error", "이메일이 중복됩니다.");
+            return new ResponseEntity<>(res, HttpStatus.OK);
         }
 
         if(userAuthService.userSignUp(user)) {
@@ -76,6 +77,7 @@ public class UserAuthController {
         if(state == 'C'){ // 이메일 인증하지 않은 회원인 경우
             res.put("result", "fail");
             res.put("error", "Email unauthenticated");
+            return new ResponseEntity<>(res, HttpStatus.OK);
         } else if(state == 'T' || state == 'M'){
             // 회원 인증이 완료된 경우 success 결과와 token 을 발급해준다.
                 res.put("result", "success");

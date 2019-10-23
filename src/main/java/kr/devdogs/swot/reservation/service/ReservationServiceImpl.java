@@ -16,7 +16,6 @@ public class ReservationServiceImpl implements ReservationService{
     @Autowired UserMapper userMapper;
 
     public int create(Reservation reservation){
-        System.out.println(reservation.getDt());
         reservationMapper.create(reservation);
         reservation.getId();
         return reservation.getId();
@@ -53,7 +52,7 @@ public class ReservationServiceImpl implements ReservationService{
     }
 
     public int decline(int managerId, int id){
-        char state = userMapper.findByUserId(id).getState();
+        char state = userMapper.findByUserId(managerId).getState();
         if(state == 'M'){
             int updatedLine = reservationMapper.decline(id);
             return updatedLine;
