@@ -40,14 +40,13 @@ public class ClassroomController {
             return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
         }
 
-        int id = classroomService.create(managerId, classroom);
-
-        if(id == -1){
+        if(classroomService.auth(managerId) == false){
             res.put("result", "fail");
             res.put("error", "관리자가 아닙니다.");
             return new ResponseEntity<>(res, HttpStatus.UNAUTHORIZED);
         }
 
+        int id = classroomService.create(classroom);
         Classroom currentClass = classroomService.findById(id);
         if(currentClass != null) {
             res.put("result", "success");
@@ -99,10 +98,14 @@ public class ClassroomController {
         Map<String, Object> res = new HashMap<String, Object>();
         int managerId = (int) req.getAttribute("session");
 
+        if(classroomService.auth(managerId) == false){
+            res.put("result", "fail");
+            res.put("error", "관리자가 아닙니다.");
+            return new ResponseEntity<>(res, HttpStatus.UNAUTHORIZED);
+        }
+
         classroom.setId(id);
-
-        Classroom currentClass = classroomService.modify(managerId, classroom);
-
+        Classroom currentClass = classroomService.modify(classroom);
         if(currentClass == null){
             res.put("result", "fail");
             res.put("error", "Unknown Error");
@@ -119,7 +122,13 @@ public class ClassroomController {
         Map<String, Object> res = new HashMap<String, Object>();
         int managerId = (int) req.getAttribute("session");
 
-        if(classroomService.delete(managerId, id)){
+        if(classroomService.auth(managerId) == false){
+            res.put("result", "fail");
+            res.put("error", "관리자가 아닙니다.");
+            return new ResponseEntity<>(res, HttpStatus.UNAUTHORIZED);
+        }
+
+        if(classroomService.delete(id)){
             res.put("result", "success");
         } else {
             res.put("result", "fail");

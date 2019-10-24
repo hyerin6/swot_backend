@@ -37,7 +37,7 @@ public class UserAuthController {
         user.getStudentId() == null ||
         user.getPhone() == null) {
             res.put("result", "fail");
-            res.put("error", "Email, Password, Name, StudentId, phone is Required");
+            res.put("error", "Email, Password, Name, StudentId, Phone is Required");
             return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
         }
 

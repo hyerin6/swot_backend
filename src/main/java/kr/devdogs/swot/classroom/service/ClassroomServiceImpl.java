@@ -16,43 +16,44 @@ public class ClassroomServiceImpl implements ClassroomService{
     @Autowired UserMapper userMapper;
 
     // 강의실 생성
-    public int create(int managerId, Classroom classroom){
-        User manager = userMapper.findByUserId(managerId);
-        if(manager.getState() != 'M'){
-            return -1;
-        }
+    @Override
+    public int create(Classroom classroom){
         classroomMapper.create(classroom);
         return classroom.getId();
     }
 
     // 강의실 id로 select
+    @Override
     public Classroom findById(int id){
         return classroomMapper.findById(id);
     }
 
+    @Override
     public List<Classroom> readAll(){
         return classroomMapper.readAll();
     }
 
     // 강의실 정보 수정
-    public Classroom modify(int managerId, Classroom classroom){
-        int id = managerId;
-        User manager = userMapper.findByUserId(managerId);
-        if(manager.getState() != 'M'){
-            return null;
-        }
+    @Override
+    public Classroom modify(Classroom classroom){
         int updatedLine = classroomMapper.modify(classroom);
         return classroomMapper.findById(classroom.getId());
     }
 
     // 강의실 삭제
-    public boolean delete(int managerId, int id){
-        User manager = userMapper.findByUserId(managerId);
-        if(manager.getState() != 'M'){
-            return false;
-        }
+    @Override
+    public boolean delete(int id){
         int deletedLine = classroomMapper.delete(id);
         if(deletedLine == 1){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean auth(int managerId){
+        User manager = userMapper.findByUserId(managerId);
+        if(manager.getState() == 'M'){
             return true;
         }
         return false;

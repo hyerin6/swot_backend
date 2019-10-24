@@ -21,12 +21,14 @@
 
     <update id="modify" >
         UPDATE classroom
-        SET groupName = #{groupName}, groupNo = #{groupNo}, roomNo = #{roomNo}, state = #{state}, total = #{total}
-        WHERE id = {id}
+        SET groupName = #{groupName}, groupNo = #{groupNo}, roomNo = #{roomNo},
+        total = #{total}, state = #{state}
+        WHERE id = #{id}
     </update>
 
     <update id="delete" >
-        UPDATE classroom SET state = 'D'
-        WHERE id = {id}
+        UPDATE classroom
+        SET state = 'D'
+        WHERE id = #{id}
     </update>
 </mapper>

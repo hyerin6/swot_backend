@@ -31,8 +31,18 @@ public class ReservationController {
     @RequestMapping(value="create/{roomId}", method=RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> create(HttpServletRequest req,
                                                       @PathVariable("roomId") int roomId,
-                                                      @RequestBody Reservation reservation){
+                                                      Reservation reservation){
         Map<String, Object> res = new HashMap<String, Object>();
+
+        if(reservation.getPhone() == null ||
+        reservation.getReason() == null ||
+        reservation.getTotal() == 0 ||
+        reservation.getStartTime() == null ||
+        reservation.getEndTime() == null){
+            res.put("result", "fail");
+            res.put("error", "reservation Data is Required");
+            return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
+        }
 
         int userId = (int) req.getAttribute("session");
 
@@ -96,6 +106,12 @@ public class ReservationController {
         Map<String, Object> res = new HashMap<String, Object>();
         int managerId = (int) req.getAttribute("session");
 
+        if(reservationService.auth(managerId) == false){
+            res.put("result", "fail");
+            res.put("error", "관리자가 아닙니다.");
+            return new ResponseEntity<>(res, HttpStatus.UNAUTHORIZED);
+        }
+
         int updatedLine = reservationService.accept(managerId, id);
         if(updatedLine == 1){
             res.put("result", "success");
@@ -111,6 +127,12 @@ public class ReservationController {
     public ResponseEntity<Map<String, Object>> decline(HttpServletRequest req, @PathVariable("id") int id){
         Map<String, Object> res = new HashMap<String, Object>();
         int managerId = (int) req.getAttribute("session");
+
+        if(reservationService.auth(managerId) == false){
+            res.put("result", "fail");
+            res.put("error", "관리자가 아닙니다.");
+            return new ResponseEntity<>(res, HttpStatus.UNAUTHORIZED);
+        }
 
         int updatedLine = reservationService.decline(managerId, id);
         if(updatedLine == 1){
