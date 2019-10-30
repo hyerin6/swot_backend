@@ -60,13 +60,11 @@ public class UserAuthServiceImpl implements UserAuthService{
     // 이메일 중복 검사, 중복이면 return true
     @Override
     public boolean isEmailDuplicate(User user){
-        String selectString = userMapper.emailDuplicate(user);
-
-        if(selectString == null) {
-            return false;
-        } else {
-            return true;
-        }
+        if(userMapper.emailDuplicate(user) == null){
+           return false;
+       } else {
+           return true;
+       }
     }
 
     @Override

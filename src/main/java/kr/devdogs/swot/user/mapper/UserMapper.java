@@ -23,8 +23,8 @@ public interface UserMapper {
     public int emailCert(String certToken);
 
     // 이메일 중복 확인
-    @Select("SELECT email FROM user WHERE email = #{email} AND NOT state='D'")
-    public String emailDuplicate(User user);
+    @Select("SELECT * FROM user WHERE email = #{email}")
+    public User emailDuplicate(User user);
 
     // 비밀번호 변경을 위한 user 정보 update
     @Update("UPDATE user SET modifyPw = #{modifyPw}, state = 'C', token = #{token} " +
