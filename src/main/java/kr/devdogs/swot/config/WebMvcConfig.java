@@ -12,7 +12,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     private String[] exclude = new String[]{
             "/static/**",
-            "/error",
+            "/error/**",
             "/test/**",
             "/api/auth/**",
             "/"

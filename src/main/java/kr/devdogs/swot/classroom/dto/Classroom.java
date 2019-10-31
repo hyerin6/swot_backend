@@ -10,8 +10,8 @@ import java.util.Date;
 public class Classroom {
     int id;
     int groupNo; // 예) 6
-    String roomNo; // 예) m402
-    String roomName; // 예) 미가엘관
+    String roomNo; // 예) 6202
+    String roomName; // 예) 소프트웨어공학과 실습실 
     char state;
     int total;
     Date createdDate;

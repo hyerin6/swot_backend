@@ -6,8 +6,8 @@
 
     <insert id="create" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO classroom
-        (groupName, groupNo, roomNo, state, total, createdDate, updatedDate)
-        VALUES (#{groupName}, #{groupNo}, #{roomNo}, 'T', #{total}, now(), now())
+        (groupNo, roomNo, roomName, state, total, createdDate, updatedDate)
+        VALUES (#{groupNo}, #{roomNo}, #{roomName}, 'T', #{total}, now(), now())
     </insert>
 
     <select id="findById" resultType="kr.devdogs.swot.classroom.dto.Classroom">
@@ -21,7 +21,7 @@
 
     <update id="modify" >
         UPDATE classroom
-        SET groupName = #{groupName}, groupNo = #{groupNo}, roomNo = #{roomNo},
+        SET groupNo = #{groupNo}, roomNo = #{roomNo}, #{roomName},
         total = #{total}, state = #{state}
         WHERE id = #{id}
     </update>

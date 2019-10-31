@@ -10,7 +10,7 @@
     </insert>
 
     <select id="findById" resultType="kr.devdogs.swot.reservation.dto.Reservation">
-        SELECT * from reservation WHERE id = #{id} AND reservationDate > now()
+        SELECT * from reservation WHERE id = #{id} AND reservationDate >= date_format(now(), '%Y-%m-%d')
     </select>
 
     <update id="delete">
@@ -18,15 +18,15 @@
     </update>
 
     <select id="findByUserId" resultType="kr.devdogs.swot.reservation.dto.Reservation">
-        SELECT * from reservation WHERE userId = #{userId} AND reservationDate > now()
+        SELECT * from reservation WHERE userId = #{userId} AND reservationDate >= date_format(now(), '%Y-%m-%d')
     </select>
 
     <select id="findByRoomId" resultType="kr.devdogs.swot.reservation.dto.Reservation">
-        SELECT * from reservation WHERE roomId = #{roomId} AND reservationDate > now()
+        SELECT * from reservation WHERE roomId = #{roomId} AND reservationDate >= date_format(now(), '%Y-%m-%d')
     </select>
 
     <select id="readAll" resultType="kr.devdogs.swot.reservation.dto.Reservation">
-        SELECT * from reservation WHERE reservationDate > now()
+        SELECT * from reservation WHERE reservationDate >= date_format(now(), '%Y-%m-%d')
     </select>
 
     <update id="accept" >

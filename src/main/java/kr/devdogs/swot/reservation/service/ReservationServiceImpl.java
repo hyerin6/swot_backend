@@ -37,7 +37,7 @@ public class ReservationServiceImpl implements ReservationService{
     }
 
     @Override
-    public List<Reservation> readAll(int roomId){
+    public List<Reservation> readAll(){
         return reservationMapper.readAll();
     }
 

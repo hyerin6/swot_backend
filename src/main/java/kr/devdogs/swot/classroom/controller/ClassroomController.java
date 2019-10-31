@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 // 관리자가 Create, Update, Delete 한다.
@@ -31,10 +30,9 @@ public class ClassroomController {
         // 매니저만 강의실을 생성할 수 있다.
         int managerId = (int) req.getAttribute("session");
 
-        if(classroom.getGroupName() == null ||
-        classroom.getGroupNo() == 0 ||
-        classroom.getRoomNo() == null ||
-        classroom.getTotal() == 0){
+        if(classroom.getGroupNo() == 0 ||
+                classroom.getRoomNo() == null ||
+                classroom.getRoomName() == null){
             res.put("result", "fail");
             res.put("error", "classroom Data is Required");
             return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
@@ -58,39 +56,7 @@ public class ClassroomController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    // 강의실 모든 Data 조회
-    @RequestMapping(value="classrooms", method= RequestMethod.GET)
-    public ResponseEntity<Map<String, Object>> readAll(){
-        Map<String, Object> res = new HashMap<String, Object>();
-
-        List<Classroom> currentClass = classroomService.readAll();
-        if(currentClass.isEmpty()){
-            res.put("result", "fail");
-            res.put("error", "Unknown Error");
-        } else {
-            res.put("result", "success");
-            res.put("info", currentClass);
-        }
-        return new ResponseEntity<>(res, HttpStatus.OK);
-    }
-
-    // 특정 강의실 Data 조회
-    @RequestMapping(value="{id}", method= RequestMethod.GET)
-    public ResponseEntity<Map<String, Object>> read(@PathVariable("id") int id){
-        Map<String, Object> res = new HashMap<String, Object>();
-
-        Classroom currentClass = classroomService.findById(id);
-        if(currentClass.getGroupName() == null){
-            res.put("result", "fail");
-            res.put("error", "Unknown Error");
-        } else {
-            res.put("result", "success");
-            res.put("info", currentClass);
-        }
-        return new ResponseEntity<>(res, HttpStatus.OK);
-    }
-
-    // 강의실 정보 update - groupName, groupNo, roomNo, state, total
+    // 강의실 정보 update -groupNo, roomNo, roomName, state, total
     @RequestMapping(value="modify/{id}", method= RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> modify(@PathVariable("id") int id,
                                                       HttpServletRequest req,
