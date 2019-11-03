@@ -36,7 +36,7 @@ public class ClassroomServiceImpl implements ClassroomService{
     // 강의실 정보 수정
     @Override
     public Classroom modify(Classroom classroom){
-        int updatedLine = classroomMapper.modify(classroom);
+        classroomMapper.modify(classroom);
         return classroomMapper.findById(classroom.getId());
     }
 

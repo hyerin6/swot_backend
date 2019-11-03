@@ -15,17 +15,25 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public int create(Board board){
-        return boardMapper.create(board);
+        boardMapper.create(board);
+        return board.getId();
     }
 
     @Override
-    public Board modify(Board board){
-        return null;
+    public Board modify(Board board) {
+        int insertLine = boardMapper.modify(board);
+        if(insertLine == 1) return find(board.getId());
+        else return null;
     }
 
     @Override
-    public Board findById(int id){
-        return boardMapper.findById(id);
+    public Board find(int id){
+        return boardMapper.find(id);
+    }
+
+    @Override
+    public Board findById(int code, int id){
+        return boardMapper.findById(code, id);
     }
 
     @Override
@@ -34,13 +42,13 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public List<Board> findAll(){
-        return boardMapper.findAll();
+    public List<Board> findAll(int code){
+        return boardMapper.findAll(code);
     }
 
     @Override
     public int delete(int id){
-        return 1;
+        return boardMapper.delete(id);
     }
 
 }

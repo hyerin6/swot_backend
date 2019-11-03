@@ -4,9 +4,37 @@
 
 <mapper namespace="kr.devdogs.swot.board.mapper.BoardMapper">
 
+    <insert id="create" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO board(code, userId, title, body, state, createdDate, updatedDate)
+        VALUES (#{code}, #{userId}, #{title}, #{body}, 'T', now(), now())
+    </insert>
 
+    <select id="findById" resultType="kr.devdogs.swot.board.dto.Board">
+        SELECT * FROM board WHERE id = #{id} AND code = #{code} AND state NOT LIKE 'D'
+    </select>
 
+    <select id="findByUserId" resultType="kr.devdogs.swot.board.dto.Board">
+        SELECT * FROM board WHERE userId = #{userId} AND state NOT LIKE 'D'
+    </select>
 
+    <select id="find" resultType="kr.devdogs.swot.board.dto.Board">
+        SELECT * FROM board WHERE id = #{id} AND state NOT LIKE 'D'
+    </select>
 
+    <select id="findAll" resultType="kr.devdogs.swot.board.dto.Board">
+        SELECT * FROM board WHERE code = #{code} AND state NOT LIKE 'D'
+    </select>
+
+    <update id="modify">
+        UPDATE board
+        SET title = #{title}, body = #{body}
+        WHERE id = #{id}
+    </update>
+
+    <update id="delete">
+        UPDATE board
+        SET state = 'D'
+        WHERE id = #{id}
+    </update>
 
 </mapper>

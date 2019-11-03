@@ -13,12 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
 // 게시글 생성, 수정, 삭제, 목록 출력, 특정 게시글 읽기 (게시글은 댓글을 항상 같이 읽어옴)
 
 @RestController
+@RequestMapping(value = "/api/board")
 public class BoardController {
 
     @Autowired
@@ -46,7 +48,7 @@ public class BoardController {
                 char state = userService.findByUserId(userId).getState();
                 if (state == 'M') {
                     int id = boardService.create(board);
-                    Board currentBoard = boardService.findById(id);
+                    Board currentBoard = boardService.findById(board.getCode(), id);
                     if (currentBoard != null) {
                         res.put("result", "success");
                         res.put("info", currentBoard);
@@ -63,7 +65,7 @@ public class BoardController {
             case 2:
             case 3: // 스터디, Q&A
                 int id = boardService.create(board);
-                Board currentBoard = boardService.findById(id);
+                Board currentBoard = boardService.findById(board.getCode(), id);
                 if (currentBoard != null) {
                     res.put("result", "success");
                     res.put("info", currentBoard);
@@ -82,7 +84,7 @@ public class BoardController {
 
     // title, body 변경
     @RequestMapping(value = "modify/{id}", method = RequestMethod.POST)
-    public ResponseEntity<Map<String, Object>> modify(HttpServletRequest req, Board board) {
+    public ResponseEntity<Map<String, Object>> modify(HttpServletRequest req, @PathVariable("id") int id, Board board) {
         Map<String, Object> res = new HashMap<String, Object>();
 
         if (board.getTitle() == null || board.getBody() == null) {
@@ -93,15 +95,19 @@ public class BoardController {
 
         int userId = (int) req.getAttribute("session");
         board.setUserId(userId);
+        Board findBoard = boardService.find(id);
 
-        Board currentBoard = boardService.modify(board);
-
-        if (currentBoard == null) {
+        if(findBoard.getUserId() != userId){
             res.put("result", "fail");
-            res.put("error", "Unknown Error");
+            res.put("error", "사용자에게 수정 권한이 없습니다.");
         } else {
-            res.put("result", "success");
-            res.put("info", currentBoard);
+            Board currentBoard = boardService.modify(board);
+            if (currentBoard == null) {
+                res.put("result", "fail");
+                res.put("error", "Unknown Error");
+            } else {
+                res.put("info", currentBoard);
+            }
         }
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
@@ -113,18 +119,17 @@ public class BoardController {
         Map<String, Object> res = new HashMap<String, Object>();
 
         int userId = (int) req.getAttribute("session");
-        Board board = boardService.findById(id);
+        Board board = boardService.find(id);
 
         switch (board.getCode()) {
             case 1: // 공지사항
                 char state = userService.findByUserId(userId).getState();
                 // 공지사항 게시글은 관리자만 삭제할 수 있다.
-                if (state == 'M'){
-                    int updatedDate = boardService.delete(id);
-                    if(updatedDate == 1){
+                if (state == 'M') {
+                    int updatedLine = boardService.delete(id);
+                    if (updatedLine == 1) {
                         res.put("result", "success");
                     } else {
-                        res.put("result", "fail");
                         res.put("result", "fail");
                         res.put("error", "Unknown Error");
                     }
@@ -137,7 +142,7 @@ public class BoardController {
             case 2:
             case 3: // 스터디, Q&A
                 int updatedDate = boardService.delete(id);
-                if(updatedDate == 1){
+                if (updatedDate == 1) {
                     res.put("result", "success");
                 } else {
                     res.put("result", "fail");
@@ -152,28 +157,22 @@ public class BoardController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    // 전체 읽어오기 (최신순)
-    @RequestMapping(value = "{code}/boards", method = RequestMethod.GET)
-    public ResponseEntity<Map<String, Object>> readAll(HttpServletRequest req, @PathVariable("code") int code) {
+    // 특정 유저가 작성한 게시글 정보 가져오기
+    @RequestMapping(value = "myBoards", method = RequestMethod.GET)
+    public ResponseEntity<Map<String, Object>> findByUserId(HttpServletRequest req) {
         Map<String, Object> res = new HashMap<String, Object>();
 
+        int userId = (int) req.getAttribute("session");
 
+        List<Board> boards = boardService.findByUserId(userId);
 
-
-
-
-
-
-
+        if(boards == null){
+            res.put("result", "fail");
+            res.put("error", "Unknown Error");
+        } else {
+            res.put("result", "success");
+            res.put("info", boards);
+        }
         return new ResponseEntity<>(res, HttpStatus.OK);
-
     }
-
-    // 특정 게시글 정보 읽어오기
-
-    // 특정 유저가 작성한 게시글 정보 가져오기
-
-
-
 }
-

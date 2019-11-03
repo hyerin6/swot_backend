@@ -8,7 +8,10 @@ import java.util.List;
 @Mapper
 public interface BoardMapper {
     public int create(Board board);
-    public Board findById(int id);
+    public Board findById(int code, int id);
+    public Board find(int id);
     public List<Board> findByUserId(int userId);
-    public List<Board> findAll();
+    public List<Board> findAll(int code);
+    public int modify(Board board);
+    public int delete(int id);
 }
