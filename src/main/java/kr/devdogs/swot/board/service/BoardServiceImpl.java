@@ -2,6 +2,7 @@ package kr.devdogs.swot.board.service;
 
 import kr.devdogs.swot.board.dto.Board;
 import kr.devdogs.swot.board.mapper.BoardMapper;
+import kr.devdogs.swot.comment.mapper.CommentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,8 +11,8 @@ import java.util.List;
 @Service("BoardService")
 public class BoardServiceImpl implements BoardService{
 
-    @Autowired
-    BoardMapper boardMapper;
+    @Autowired BoardMapper boardMapper;
+    @Autowired CommentMapper commentMapper;
 
     @Override
     public int create(Board board){
@@ -48,7 +49,9 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public int delete(int id){
-        return boardMapper.delete(id);
+        int result = boardMapper.delete(id);
+        result += commentMapper.deleteAll(id);
+        return result;
     }
 
 }

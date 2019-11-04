@@ -1,4 +1,4 @@
-package kr.devdogs.swot.coment.dto;
+package kr.devdogs.swot.comment.dto;
 
 import lombok.Data;
 import org.springframework.stereotype.Repository;
@@ -7,7 +7,7 @@ import java.sql.Date;
 
 @Data
 @Repository
-public class Coment {
+public class Comment {
     int id;
     int boardId;
     int userId;

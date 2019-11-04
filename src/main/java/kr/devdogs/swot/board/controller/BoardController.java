@@ -23,10 +23,8 @@ import java.util.Map;
 @RequestMapping(value = "/api/board")
 public class BoardController {
 
-    @Autowired
-    UserService userService;
-    @Autowired
-    BoardService boardService;
+    @Autowired UserService userService;
+    @Autowired BoardService boardService;
 
     // 게시판 글쓰기 : 1) 공지사항, 2) 스터디, 3) Q&A
     @RequestMapping(value = "create", method = RequestMethod.POST)
@@ -127,7 +125,7 @@ public class BoardController {
                 // 공지사항 게시글은 관리자만 삭제할 수 있다.
                 if (state == 'M') {
                     int updatedLine = boardService.delete(id);
-                    if (updatedLine == 1) {
+                    if (updatedLine != 0) {
                         res.put("result", "success");
                     } else {
                         res.put("result", "fail");
@@ -142,7 +140,7 @@ public class BoardController {
             case 2:
             case 3: // 스터디, Q&A
                 int updatedDate = boardService.delete(id);
-                if (updatedDate == 1) {
+                if (updatedDate != 0) {
                     res.put("result", "success");
                 } else {
                     res.put("result", "fail");

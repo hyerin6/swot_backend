@@ -66,10 +66,10 @@ public class UserAuthController {
 
         // 이전에 탈퇴했던 이메일도 사용 불가
         if(userAuthService.isEmailDuplicate(user)){
-            res.put("result", "이메일 중복입니다.");
+            res.put("result", "fail");
             return new ResponseEntity<>(res, HttpStatus.OK);
         } else {
-            res.put("result", "사용 가능한 이메일 입니다.");
+            res.put("result", "success");
         }
         return new ResponseEntity<>(res, HttpStatus.OK);
     }

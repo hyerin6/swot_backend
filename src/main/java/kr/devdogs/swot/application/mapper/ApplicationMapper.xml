@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.devdogs.swot.application.mapper.ApplicationMapper">
+
+    <insert id="create" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+        application(boardId, userId, state, startTime, endTime, applicationDate, total, createdDate, updatedDate)
+        VALUES(#{boardId}, #{userId}, 'C', #{startTime}, #{endTime}, #{applicationDate}, #{total}, now(), now())
+    </insert>
+
+    <update id="accept">
+
+    </update>
+
+    <update id="decline">
+    </update>
+
+
+</mapper>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.devdogs.swot.comment.mapper.CommentMapper">
+
+    <insert id="create" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO comment(boardId, userId, bodyText, state, createdDate, updatedDate)
+        VALUES(#{boardId}, #{userId}, #{bodyText}, 'T', now(), now())
+    </insert>
+
+    <update id="deleteOne">
+        UPDATE comment SET state = 'D' WHERE id = #{id} AND userId = #{userId}
+    </update>
+
+    <update id="deleteAll">
+        UPDATE comment SET state = 'D' WHERE boardId = #{boardId}
+    </update>
+
+    <select id="findByBoardId" resultType="kr.devdogs.swot.comment.dto.Comment">
+        SELECT * FROM comment WHERE boardId = #{boardId}
+    </select>
+
+    <select id="findByUserId" resultType="kr.devdogs.swot.comment.dto.Comment">
+        SELECT * FROM comment WHERE userId = #{userId}
+    </select>
+
+</mapper>
