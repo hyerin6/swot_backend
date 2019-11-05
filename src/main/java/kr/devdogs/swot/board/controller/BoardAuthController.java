@@ -21,7 +21,7 @@ public class BoardAuthController {
     @Autowired
     BoardService boardService;
 
-    // 전체 읽어오기 (최신순)
+    // 전체 읽어오기
     @RequestMapping(value = "{code}/list", method = RequestMethod.GET)
     public ResponseEntity<Map<String, Object>> readAll(@PathVariable("code") int code) {
         Map<String, Object> res = new HashMap<String, Object>();

@@ -115,8 +115,8 @@ public class ReservationController {
     }
 
     // 관리자 - 예약 거절
-    @RequestMapping(value="decline/{id}", method=RequestMethod.GET)
-    public ResponseEntity<Map<String, Object>> decline(HttpServletRequest req, @PathVariable("id") int id){
+    @RequestMapping(value="decline/{id}", method=RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> decline(HttpServletRequest req, @PathVariable("id") int id, String failReason){
         Map<String, Object> res = new HashMap<String, Object>();
         int managerId = (int) req.getAttribute("session");
 
@@ -126,7 +126,7 @@ public class ReservationController {
             return new ResponseEntity<>(res, HttpStatus.UNAUTHORIZED);
         }
 
-        int updatedLine = reservationService.decline(managerId, id);
+        int updatedLine = reservationService.decline(managerId, id, failReason);
         if(updatedLine == 1){
             res.put("result", "success");
         } else {

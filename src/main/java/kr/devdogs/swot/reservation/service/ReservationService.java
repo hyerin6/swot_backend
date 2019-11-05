@@ -14,6 +14,6 @@ public interface ReservationService {
     public List<Reservation> readAll();
     public Reservation findById(int id);
     public int accept(int managerId, int id);
-    public int decline(int managerId, int id);
+    public int decline(int managerId, int id, String failReason);
     public boolean auth(int managerId);
 }

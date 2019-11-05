@@ -11,11 +11,31 @@
     </insert>
 
     <update id="accept">
-
+        UPDATE application SET state = 'T' WHERE id = #{id}
     </update>
 
     <update id="decline">
+        UPDATE application SET state = 'D' WHERE id = #{id}
     </update>
 
+    <update id="delete">
+        UPDATE application SET state = 'D' WHERE id = #{id}
+    </update>
+
+    <select id="findByBoardId" resultType="kr.devdogs.swot.application.dto.Application">
+        SELECT * FROM application WHERE boardId = #{boardId} AND applicationDate >= date_format(now(), '%Y-%m-%d')
+    </select>
+
+    <select id="findById" resultType="kr.devdogs.swot.application.dto.Application">
+        SELECT * FROM application WHERE id = #{id} AND applicationDate >= date_format(now(), '%Y-%m-%d')
+    </select>
+
+    <select id="myAcceptStudy" resultType="kr.devdogs.swot.application.dto.Application">
+        SELECT * FROM application WHERE userId = #{userId} AND state = 'T' AND applicationDate >= date_format(now(), '%Y-%m-%d')
+    </select>
+
+    <select id="findByUserId" resultType="kr.devdogs.swot.application.dto.Application">
+        SELECT * FROM application WHERE userId = #{userId} AND applicationDate >= date_format(now(), '%Y-%m-%d')
+    </select>
 
 </mapper>

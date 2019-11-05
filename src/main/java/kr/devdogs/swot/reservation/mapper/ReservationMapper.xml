@@ -22,7 +22,7 @@
     </select>
 
     <select id="findByRoomId" resultType="kr.devdogs.swot.reservation.dto.Reservation">
-        SELECT * from reservation WHERE roomId = #{roomId} AND reservationDate >= date_format(now(), '%Y-%m-%d')
+        SELECT * from reservation WHERE roomId = #{roomId} AND reservationDate >= date_format(now(), '%Y-%m-%d') AND state = 'T'
     </select>
 
     <select id="readAll" resultType="kr.devdogs.swot.reservation.dto.Reservation">
@@ -34,7 +34,7 @@
     </update>
 
     <update id="decline" >
-        UPDATE reservation SET state = 'D' WHERE id = #{id}
+        UPDATE reservation SET state = 'D', failReason = #{failReason} WHERE id = #{id}
     </update>
 
 </mapper>

@@ -30,5 +30,5 @@ public interface ReservationMapper {
     public int accept(int id);
 
     // 관리자 - 거절
-    public int decline(int id);
+    public int decline(int id, String failReason);
 }

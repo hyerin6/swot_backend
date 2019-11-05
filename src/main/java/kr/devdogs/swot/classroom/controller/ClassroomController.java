@@ -56,7 +56,7 @@ public class ClassroomController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    // 강의실 정보 update -groupNo, roomNo, roomName, state, total
+    // 강의실 정보 update - groupNo, roomNo, roomName, state, total
     @RequestMapping(value="modify/{id}", method= RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> modify(@PathVariable("id") int id,
                                                       HttpServletRequest req,

@@ -104,6 +104,7 @@ public class BoardController {
                 res.put("result", "fail");
                 res.put("error", "Unknown Error");
             } else {
+                res.put("result", "success");
                 res.put("info", currentBoard);
             }
         }

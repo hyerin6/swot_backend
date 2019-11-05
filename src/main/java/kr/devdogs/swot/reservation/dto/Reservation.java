@@ -1,10 +1,8 @@
 package kr.devdogs.swot.reservation.dto;
 
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Time;
 import java.util.Date;
 
 @Data

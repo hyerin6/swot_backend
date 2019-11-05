@@ -48,7 +48,7 @@ public class ReservationServiceImpl implements ReservationService{
 
     @Override
     public int accept(int managerId, int id){
-        char state = userMapper.findByUserId(id).getState();
+        char state = userMapper.findByUserId(managerId).getState();
         if(state == 'M'){
             int updatedLine = reservationMapper.accept(id);
             return updatedLine;
@@ -58,10 +58,10 @@ public class ReservationServiceImpl implements ReservationService{
     }
 
     @Override
-    public int decline(int managerId, int id){
+    public int decline(int managerId, int id, String failReason){
         char state = userMapper.findByUserId(managerId).getState();
         if(state == 'M'){
-            int updatedLine = reservationMapper.decline(id);
+            int updatedLine = reservationMapper.decline(id, failReason);
             return updatedLine;
         } else {
             return -1;
