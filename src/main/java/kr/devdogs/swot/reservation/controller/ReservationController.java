@@ -36,7 +36,9 @@ public class ReservationController {
         reservation.getTotal() == 0 ||
         reservation.getStartTime() == null ||
         reservation.getEndTime() == null ||
-        reservation.getReservationDate() == null){
+        reservation.getReservationDate() == null ||
+        reservation.getStudentId() == null ||
+        reservation.getStudentName() == null){
             res.put("result", "fail");
             res.put("error", "reservation Data is Required");
             return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);

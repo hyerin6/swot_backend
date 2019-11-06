@@ -6,8 +6,8 @@
 
     <insert id="create" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO
-        application(boardId, userId, state, startTime, endTime, applicationDate, total, createdDate, updatedDate)
-        VALUES(#{boardId}, #{userId}, 'C', #{startTime}, #{endTime}, #{applicationDate}, #{total}, now(), now())
+        application(boardId, userId, state, applicationDate, createdDate, updatedDate)
+        VALUES(#{boardId}, #{userId}, 'C', #{applicationDate} now(), now())
     </insert>
 
     <update id="accept">
@@ -19,23 +19,23 @@
     </update>
 
     <update id="delete">
-        UPDATE application SET state = 'D' WHERE id = #{id}
+        UPDATE application SET state = 'R' WHERE id = #{id}
     </update>
 
     <select id="findByBoardId" resultType="kr.devdogs.swot.application.dto.Application">
-        SELECT * FROM application WHERE boardId = #{boardId} AND applicationDate >= date_format(now(), '%Y-%m-%d')
+        SELECT * FROM application WHERE boardId = #{boardId} AND applicationDate >= date_format(now(), '%Y-%m-%d') AND state NOT LIKE 'R'
     </select>
 
     <select id="findById" resultType="kr.devdogs.swot.application.dto.Application">
-        SELECT * FROM application WHERE id = #{id} AND applicationDate >= date_format(now(), '%Y-%m-%d')
+        SELECT * FROM application WHERE id = #{id} AND applicationDate >= date_format(now(), '%Y-%m-%d') AND state NOT LIKE 'R'
     </select>
 
     <select id="myAcceptStudy" resultType="kr.devdogs.swot.application.dto.Application">
-        SELECT * FROM application WHERE userId = #{userId} AND state = 'T' AND applicationDate >= date_format(now(), '%Y-%m-%d')
+        SELECT * FROM application WHERE userId = #{userId} AND state = 'T' AND applicationDate >= date_format(now(), '%Y-%m-%d') AND state NOT LIKE 'R'
     </select>
 
     <select id="findByUserId" resultType="kr.devdogs.swot.application.dto.Application">
-        SELECT * FROM application WHERE userId = #{userId} AND applicationDate >= date_format(now(), '%Y-%m-%d')
+        SELECT * FROM application WHERE userId = #{userId} AND applicationDate >= date_format(now(), '%Y-%m-%d') AND state NOT LIKE 'R'
     </select>
 
 </mapper>

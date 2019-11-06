@@ -2,6 +2,8 @@ package kr.devdogs.swot.application.controller;
 
 import kr.devdogs.swot.application.dto.Application;
 import kr.devdogs.swot.application.service.ApplicationService;
+import kr.devdogs.swot.user.dto.User;
+import kr.devdogs.swot.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +23,7 @@ import java.util.Map;
 public class ApplicationController{
 
     @Autowired ApplicationService applicationService;
+    @Autowired UserService userService;
 
     // 예약
     @RequestMapping(value="create", method= RequestMethod.POST)
@@ -28,12 +32,10 @@ public class ApplicationController{
         int userId = (int) req.getAttribute("session");
         application.setUserId(userId);
 
-        if(application.getApplicationDate() == null ||
-        application.getEndTime() == null ||
-        application.getStartTime() == null){
+        if(applicationService.findByUserId(userId) != null){
             res.put("result", "fail");
-            res.put("error", "Application Data is Required");
-            return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
+            res.put("error", "이미 신청한 스터디 입니다.");
+            return new ResponseEntity<>(res, HttpStatus.OK);
         }
 
         if(applicationService.create(application) == 1){
@@ -42,7 +44,6 @@ public class ApplicationController{
             res.put("result", "fail");
             res.put("error", "Unknown Error");
         }
-
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
@@ -79,10 +80,15 @@ public class ApplicationController{
         Map<String, Object> res = new HashMap<String, Object>();
 
         List<Application> applications = applicationService.findByBoardId(boardId);
+        List<User> users = new ArrayList<>();
+        for(Application a : applications){
+            users.add(userService.findByUserId(a.getUserId()));
+        }
 
         if(applications != null){
             res.put("result", "success");
-            res.put("info", applications);
+            res.put("applications", applications);
+            res.put("users", users);
         } else{
             res.put("result", "fail");
             res.put("error", "Unknown Error");
@@ -90,23 +96,26 @@ public class ApplicationController{
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    /*
+
     @RequestMapping(value="/{id}", method= RequestMethod.GET)
     public ResponseEntity<Map<String, Object>> findById(@PathVariable("id") int id) {
         Map<String, Object> res = new HashMap<String, Object>();
 
         Application application = applicationService.findById(id);
+        List<User> users = new ArrayList<>();
+        users.add(userService.findByUserId(application.getUserId()));
 
         if(application != null){
             res.put("result", "success");
-            res.put("info", application);
+            res.put("application", application);
+            res.put("users", users);
         } else{
             res.put("result", "fail");
             res.put("error", "Unknown Error");
         }
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
-     */
+
 
     @RequestMapping(value="/myAcceptStudy", method= RequestMethod.GET)
     public ResponseEntity<Map<String, Object>> myAcceptStudy(HttpServletRequest req) {
@@ -114,10 +123,15 @@ public class ApplicationController{
         int userId = (int) req.getAttribute("session");
 
         List<Application> applications = applicationService.myAcceptStudy(userId);
+        List<User> users = new ArrayList<>();
+        for(Application a : applications){
+            users.add(userService.findByUserId(a.getUserId()));
+        }
 
         if(applications != null){
             res.put("result", "success");
-            res.put("info", applications);
+            res.put("applications", applications);
+            res.put("users", users);
         } else{
             res.put("result", "fail");
             res.put("error", "Unknown Error");
@@ -131,10 +145,15 @@ public class ApplicationController{
         int userId = (int) req.getAttribute("session");
 
         List<Application> applications = applicationService.findByUserId(userId);
+        List<User> users = new ArrayList<>();
+        for(Application a : applications){
+            users.add(userService.findByUserId(a.getUserId()));
+        }
 
         if(applications != null){
             res.put("result", "success");
-            res.put("info", applications);
+            res.put("application", applications);
+            res.put("users", users);
         } else{
             res.put("result", "fail");
             res.put("error", "Unknown Error");

@@ -21,4 +21,6 @@ public class Reservation {
     char state; // 수락 OR 거절
     Date createdDate; // 신청한 날짜와 시간
     Date updatedDate; // 처리 시간
+    String studentId;
+    String studentName;
 }

@@ -16,10 +16,6 @@ public class Application { // 스터디 예약
     */
     int userId;
     char state;
-    String startTime;
-    String endTime;
-    String applicationDate;
-    int total;
     Date createdDate;
     Date updatedDate;
 }
