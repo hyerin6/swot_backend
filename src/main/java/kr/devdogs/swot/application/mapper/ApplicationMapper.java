@@ -15,4 +15,5 @@ public interface ApplicationMapper {
     public List<Application> myAcceptStudy(int userId); // 나의 스터디 목록
     public List<Application> findByUserId(int userId); // 특정 사용자 예약 현황
     public int delete(int id);
+    public int deleteByBoardId(int boardId);
 }

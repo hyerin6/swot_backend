@@ -75,7 +75,7 @@ public class ApplicationController{
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    @RequestMapping(value="/{boardId}/list", method= RequestMethod.GET)
+    @RequestMapping(value="{boardId}/list", method= RequestMethod.GET)
     public ResponseEntity<Map<String, Object>> findByBoardId(@PathVariable("boardId") int boardId) {
         Map<String, Object> res = new HashMap<String, Object>();
 
@@ -97,7 +97,8 @@ public class ApplicationController{
     }
 
 
-    @RequestMapping(value="/{id}", method= RequestMethod.GET)
+    // 특정 스터디 정보 조회 (?)
+    @RequestMapping(value="{id}", method= RequestMethod.GET)
     public ResponseEntity<Map<String, Object>> findById(@PathVariable("id") int id) {
         Map<String, Object> res = new HashMap<String, Object>();
 
@@ -175,6 +176,5 @@ public class ApplicationController{
         }
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
-
 
 }

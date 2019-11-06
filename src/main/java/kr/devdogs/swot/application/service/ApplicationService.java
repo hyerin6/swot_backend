@@ -13,4 +13,5 @@ public interface ApplicationService {
     public List<Application> myAcceptStudy(int userId);
     public List<Application> findByUserId(int userId); // 특정 사용자 예약 현황
     public int delete(int id); // 예약 취소
+    public int deleteByBoardId(int boardId);
 }

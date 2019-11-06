@@ -14,6 +14,7 @@ public class Application { // 스터디 예약
     스터디 모집하는 사용자의 id는
     board(userId) 테이블에서 확인할 수 있다.
     */
+    String applicationDate;
     int userId;
     char state;
     Date createdDate;

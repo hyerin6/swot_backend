@@ -11,6 +11,7 @@ public class Comment {
     int id;
     int boardId;
     int userId;
+    String name; // user name
     String bodyText;
     char state;
     Date createdDate;

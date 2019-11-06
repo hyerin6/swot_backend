@@ -37,10 +37,18 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     public List<Application> findByUserId(int userId){
-        return applicationMapper.findByUserId(userId);
+        List<Application> list = applicationMapper.findByUserId(userId);
+        if(list.isEmpty()){
+            return null;
+        }
+        return list;
     }
 
     public int delete(int id){
         return applicationMapper.delete(id);
+    }
+
+    public int deleteByBoardId(int boardId){
+        return applicationMapper.deleteByBoardId(boardId);
     }
 }

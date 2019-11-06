@@ -5,8 +5,8 @@
 <mapper namespace="kr.devdogs.swot.comment.mapper.CommentMapper">
 
     <insert id="create" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO comment(boardId, userId, bodyText, state, createdDate, updatedDate)
-        VALUES(#{boardId}, #{userId}, #{bodyText}, 'T', now(), now())
+        INSERT INTO comment(boardId, userId, name, bodyText, state, createdDate, updatedDate)
+        VALUES(#{boardId}, #{userId}, #{name}, #{bodyText}, 'T', now(), now())
     </insert>
 
     <update id="deleteOne">

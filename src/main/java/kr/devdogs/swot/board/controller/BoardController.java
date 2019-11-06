@@ -1,5 +1,6 @@
 package kr.devdogs.swot.board.controller;
 
+import kr.devdogs.swot.application.service.ApplicationService;
 import kr.devdogs.swot.board.dto.Board;
 import kr.devdogs.swot.board.service.BoardService;
 import kr.devdogs.swot.user.service.UserService;
@@ -25,6 +26,7 @@ public class BoardController {
 
     @Autowired UserService userService;
     @Autowired BoardService boardService;
+    @Autowired ApplicationService applicationService;
 
     // 게시판 글쓰기 : 1) 공지사항, 2) 스터디, 3) Q&A
     @RequestMapping(value = "create", method = RequestMethod.POST)
@@ -128,6 +130,7 @@ public class BoardController {
                     int updatedLine = boardService.delete(id);
                     if (updatedLine != 0) {
                         res.put("result", "success");
+                        res.put("info", board.getCode());
                     } else {
                         res.put("result", "fail");
                         res.put("error", "Unknown Error");
@@ -138,11 +141,22 @@ public class BoardController {
                     return new ResponseEntity<>(res, HttpStatus.UNAUTHORIZED);
                 }
                 break;
-            case 2:
-            case 3: // 스터디, Q&A
-                int updatedDate = boardService.delete(id);
-                if (updatedDate != 0) {
+            case 2: // 스터디
+                applicationService.deleteByBoardId(id);
+                int result = boardService.delete(id);
+                if(result != 0){
                     res.put("result", "success");
+                    res.put("info", board.getCode());
+                } else {
+                    res.put("result", "fail");
+                    res.put("error", "Unknown Error");
+                }
+                break;
+            case 3: // Q&A
+                int updatedLine = boardService.delete(id);
+                if (updatedLine != 0) {
+                    res.put("result", "success");
+                    res.put("info", board.getCode());
                 } else {
                     res.put("result", "fail");
                     res.put("error", "Unknown Error");

@@ -2,6 +2,7 @@ package kr.devdogs.swot.comment.controller;
 
 import kr.devdogs.swot.comment.dto.Comment;
 import kr.devdogs.swot.comment.service.CommentService;
+import kr.devdogs.swot.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

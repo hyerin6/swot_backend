@@ -7,7 +7,7 @@
     <insert id="create" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO
         application(boardId, userId, state, applicationDate, createdDate, updatedDate)
-        VALUES(#{boardId}, #{userId}, 'C', #{applicationDate} now(), now())
+        VALUES(#{boardId}, #{userId}, 'C', #{applicationDate}, now(), now())
     </insert>
 
     <update id="accept">
@@ -20,6 +20,10 @@
 
     <update id="delete">
         UPDATE application SET state = 'R' WHERE id = #{id}
+    </update>
+
+    <update id="deleteByBoardId">
+        UPDATE application SET state = 'D' WHERE boardId = #{boardId}
     </update>
 
     <select id="findByBoardId" resultType="kr.devdogs.swot.application.dto.Application">
