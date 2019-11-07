@@ -12,19 +12,27 @@
     </insert>
 
     <select id="findById" resultType="kr.devdogs.swot.board.dto.Board">
-        SELECT * FROM board WHERE id = #{id} AND code = #{code} AND state NOT LIKE 'D'
+        SELECT * FROM board
+        WHERE id = #{id} AND code = #{code} AND state NOT LIKE 'D'
+        ORDER BY createdDate DESC
     </select>
 
     <select id="findByUserId" resultType="kr.devdogs.swot.board.dto.Board">
-        SELECT * FROM board WHERE userId = #{userId} AND state NOT LIKE 'D'
+        SELECT * FROM board
+        WHERE userId = #{userId} AND state NOT LIKE 'D'
+        ORDER BY createdDate DESC
     </select>
 
     <select id="find" resultType="kr.devdogs.swot.board.dto.Board">
-        SELECT * FROM board WHERE id = #{id} AND state NOT LIKE 'D'
+        SELECT * FROM board
+        WHERE id = #{id} AND state NOT LIKE 'D'
+        ORDER BY createdDate DESC
     </select>
 
     <select id="findAll" resultType="kr.devdogs.swot.board.dto.Board">
-        SELECT * FROM board WHERE code = #{code} AND state NOT LIKE 'D'
+        SELECT * FROM board
+        WHERE code = #{code} AND state NOT LIKE 'D'
+        ORDER BY createdDate DESC
     </select>
 
     <update id="modify">

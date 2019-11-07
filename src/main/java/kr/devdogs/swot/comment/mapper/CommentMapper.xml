@@ -18,11 +18,15 @@
     </update>
 
     <select id="findByBoardId" resultType="kr.devdogs.swot.comment.dto.Comment">
-        SELECT * FROM comment WHERE boardId = #{boardId}
+        SELECT * FROM comment
+        WHERE boardId = #{boardId} AND state NOT LIKE 'D'
+        ORDER BY createdDate ASC
     </select>
 
     <select id="findByUserId" resultType="kr.devdogs.swot.comment.dto.Comment">
-        SELECT * FROM comment WHERE userId = #{userId}
+        SELECT * FROM comment
+        WHERE userId = #{userId} AND state NOT LIKE 'D'
+        ORDER BY createdDate ASC
     </select>
 
 </mapper>
