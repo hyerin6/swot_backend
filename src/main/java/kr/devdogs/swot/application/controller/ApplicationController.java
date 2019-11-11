@@ -2,6 +2,8 @@ package kr.devdogs.swot.application.controller;
 
 import kr.devdogs.swot.application.dto.Application;
 import kr.devdogs.swot.application.service.ApplicationService;
+import kr.devdogs.swot.board.dto.Board;
+import kr.devdogs.swot.board.service.BoardService;
 import kr.devdogs.swot.user.dto.User;
 import kr.devdogs.swot.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,7 @@ public class ApplicationController{
 
     @Autowired ApplicationService applicationService;
     @Autowired UserService userService;
+    @Autowired BoardService boardService;
 
     // 예약
     @RequestMapping(value="create", method= RequestMethod.POST)
@@ -32,10 +35,13 @@ public class ApplicationController{
         int userId = (int) req.getAttribute("session");
         application.setUserId(userId);
 
-        if(applicationService.findByUserId(userId) != null){
-            res.put("result", "fail");
-            res.put("error", "이미 신청한 스터디 입니다.");
-            return new ResponseEntity<>(res, HttpStatus.OK);
+        List<Application> applications = applicationService.findByBoardId(application.getBoardId());
+        for(Application a : applications){
+            if(a.getUserId() == userId){
+                res.put("result", "fail");
+                res.put("error", "이미 신청한 스터디 입니다.");
+                return new ResponseEntity<>(res, HttpStatus.OK);
+            }
         }
 
         if(applicationService.create(application) == 1){
@@ -125,7 +131,9 @@ public class ApplicationController{
 
         List<Application> applications = applicationService.myAcceptStudy(userId);
         List<User> users = new ArrayList<>();
+        List<Board> boards = new ArrayList<>();
         for(Application a : applications){
+            boards.add(boardService.find(a.getBoardId()));
             users.add(userService.findByUserId(a.getUserId()));
         }
 
@@ -133,6 +141,7 @@ public class ApplicationController{
             res.put("result", "success");
             res.put("applications", applications);
             res.put("users", users);
+            res.put("boards", boards);
         } else{
             res.put("result", "fail");
             res.put("error", "Unknown Error");
@@ -140,6 +149,7 @@ public class ApplicationController{
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+    // 이 부분에서 예약 정보 줄 떼 게시글 정보도 줘야함.
     @RequestMapping(value="/myStudy", method= RequestMethod.GET)
     public ResponseEntity<Map<String, Object>> findByUserId(HttpServletRequest req) {
         Map<String, Object> res = new HashMap<String, Object>();
@@ -147,14 +157,17 @@ public class ApplicationController{
 
         List<Application> applications = applicationService.findByUserId(userId);
         List<User> users = new ArrayList<>();
+        List<Board> boards = new ArrayList<>();
         for(Application a : applications){
+            boards.add(boardService.find(a.getBoardId()));
             users.add(userService.findByUserId(a.getUserId()));
         }
 
         if(applications != null){
             res.put("result", "success");
-            res.put("application", applications);
+            res.put("applications", applications);
             res.put("users", users);
+            res.put("boards", boards);
         } else{
             res.put("result", "fail");
             res.put("error", "Unknown Error");
