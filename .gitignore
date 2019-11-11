@@ -35,7 +35,7 @@ build/
 
 /.DS_Store
 
-classes/
+classes/ 
 .cmd
 mvnw
 .mvn/
