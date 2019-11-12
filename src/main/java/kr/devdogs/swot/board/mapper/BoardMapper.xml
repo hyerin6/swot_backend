@@ -49,4 +49,10 @@
         WHERE id = #{id}
     </update>
 
+    <update id="complete">
+        UPDATE board
+        SET state = 'S'
+        WHERE id = #{id}
+    </update>
+
 </mapper>

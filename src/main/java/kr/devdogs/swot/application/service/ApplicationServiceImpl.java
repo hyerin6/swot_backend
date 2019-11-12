@@ -2,6 +2,8 @@ package kr.devdogs.swot.application.service;
 
 import kr.devdogs.swot.application.dto.Application;
 import kr.devdogs.swot.application.mapper.ApplicationMapper;
+import kr.devdogs.swot.board.dto.Board;
+import kr.devdogs.swot.board.mapper.BoardMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,7 @@ import java.util.List;
 public class ApplicationServiceImpl implements ApplicationService {
 
     @Autowired ApplicationMapper applicationMapper;
+    @Autowired BoardMapper boardMapper;
 
     public int create(Application application){
         return applicationMapper.create(application);
@@ -44,7 +47,11 @@ public class ApplicationServiceImpl implements ApplicationService {
         return list;
     }
 
-    public int delete(int id){
+    public int delete(int id){ // 스터디 예약 취소
+        Board board = boardMapper.find(applicationMapper.findById(id).getBoardId());
+        if(board.getState() == 'S'){ // 대기 상태와 스터디 예약 완료되지 않은 경우만 삭제 (R) 처리
+            return -1;
+        }
         return applicationMapper.delete(id);
     }
 

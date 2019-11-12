@@ -124,7 +124,7 @@ public class ApplicationController{
     }
 
 
-    @RequestMapping(value="/myAcceptStudy", method= RequestMethod.GET)
+    @RequestMapping(value="myAcceptStudy", method= RequestMethod.GET)
     public ResponseEntity<Map<String, Object>> myAcceptStudy(HttpServletRequest req) {
         Map<String, Object> res = new HashMap<String, Object>();
         int userId = (int) req.getAttribute("session");
@@ -150,7 +150,7 @@ public class ApplicationController{
     }
 
     // 이 부분에서 예약 정보 줄 떼 게시글 정보도 줘야함.
-    @RequestMapping(value="/myStudy", method= RequestMethod.GET)
+    @RequestMapping(value="myStudy", method= RequestMethod.GET)
     public ResponseEntity<Map<String, Object>> findByUserId(HttpServletRequest req) {
         Map<String, Object> res = new HashMap<String, Object>();
         int userId = (int) req.getAttribute("session");
@@ -177,13 +177,19 @@ public class ApplicationController{
 
 
     // 스터디 취소
-    @RequestMapping(value="/delete/{id}", method= RequestMethod.GET)
+    @RequestMapping(value="delete/{id}", method= RequestMethod.GET)
     public ResponseEntity<Map<String, Object>> delete(@PathVariable("id") int id) {
         Map<String, Object> res = new HashMap<String, Object>();
 
-        if(applicationService.delete(id) == 1){
+        int result = applicationService.delete(id);
+
+        if(result == -1){
+            res.put("result", "fail");
+            res.put("error", "이미 완료된 스터디입니다.");
+        } else if(result > 0){
             res.put("result", "success");
-        } else{
+        }
+        else{
             res.put("result", "fail");
             res.put("error", "Unknown Error");
         }

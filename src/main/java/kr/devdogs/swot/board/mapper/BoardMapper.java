@@ -14,4 +14,5 @@ public interface BoardMapper {
     public List<Board> findAll(int code);
     public int modify(Board board);
     public int delete(int id);
+    public int complete(int id);
 }

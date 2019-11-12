@@ -114,7 +114,7 @@ public class BoardController {
     }
 
     // 게시글 작성자가 게시글을 삭제하면 댓글도 자동으로 삭제처리 된다.
-    // 댓글 삭제 아직 구현안됨
+    // 예약도 삭제처리 된다.
     @RequestMapping(value = "delete/{id}", method = RequestMethod.GET)
     public ResponseEntity<Map<String, Object>> delete(HttpServletRequest req, @PathVariable("id") int id) {
         Map<String, Object> res = new HashMap<String, Object>();
@@ -144,7 +144,10 @@ public class BoardController {
             case 2: // 스터디
                 applicationService.deleteByBoardId(id);
                 int result = boardService.delete(id);
-                if(result != 0){
+                if(result == 0){
+                    res.put("result", "fail");
+                    res.put("error", "이미 모집 완료된 스터디는 삭제할 수 없습니다.");
+                } else if(result != 0){
                     res.put("result", "success");
                     res.put("info", board.getCode());
                 } else {
@@ -188,4 +191,26 @@ public class BoardController {
         }
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
+
+    @RequestMapping(value = "complete/{id}", method = RequestMethod.GET)
+    public ResponseEntity<Map<String, Object>> complete(HttpServletRequest req, @PathVariable("id") int id){
+        Map<String, Object> res = new HashMap<String, Object>();
+        int userId = (int) req.getAttribute("session");
+
+        Board findBoard = boardService.find(id);
+
+        if(findBoard.getUserId() != userId){
+            res.put("result", "fail");
+            res.put("error", "게시글 작성자가 아닙니다.");
+        } else {
+            if (boardService.complete(id) != 0) {
+                res.put("result", "success");
+            } else {
+                res.put("result", "fail");
+                res.put("error", "Unknown Error");
+            }
+        }
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
 }

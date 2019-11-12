@@ -16,4 +16,5 @@ public interface ApplicationMapper {
     public List<Application> findByUserId(int userId); // 특정 사용자 예약 현황
     public int delete(int id);
     public int deleteByBoardId(int boardId);
+    public int complete(int id);
 }

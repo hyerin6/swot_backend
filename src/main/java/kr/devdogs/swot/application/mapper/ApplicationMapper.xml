@@ -26,20 +26,28 @@
         UPDATE application SET state = 'D' WHERE boardId = #{boardId}
     </update>
 
+    <update id="complete">
+        UPDATE application SET state = 'S' WHERE id = #{id}
+    </update>
+
     <select id="findByBoardId" resultType="kr.devdogs.swot.application.dto.Application">
-        SELECT * FROM application WHERE boardId = #{boardId} AND applicationDate >= date_format(now(), '%Y-%m-%d') AND state NOT LIKE 'R'
+        SELECT * FROM application
+        WHERE boardId = #{boardId} AND applicationDate >= date_format(now(), '%Y-%m-%d') AND state NOT LIKE 'R'
     </select>
 
     <select id="findById" resultType="kr.devdogs.swot.application.dto.Application">
-        SELECT * FROM application WHERE id = #{id} AND applicationDate >= date_format(now(), '%Y-%m-%d') AND state NOT LIKE 'R'
+        SELECT * FROM application
+        WHERE id = #{id} AND applicationDate >= date_format(now(), '%Y-%m-%d') AND state NOT LIKE 'R'
     </select>
 
     <select id="myAcceptStudy" resultType="kr.devdogs.swot.application.dto.Application">
-        SELECT * FROM application WHERE userId = #{userId} AND state = 'T' AND applicationDate >= date_format(now(), '%Y-%m-%d') AND state NOT LIKE 'R'
+        SELECT * FROM application
+        WHERE userId = 2 AND (state = 'T' OR state = 'S')
+        AND applicationDate >= date_format(now(), '%Y-%m-%d') AND state NOT LIKE 'R';
     </select>
 
     <select id="findByUserId" resultType="kr.devdogs.swot.application.dto.Application">
-        SELECT * FROM application WHERE userId = #{userId} AND applicationDate >= date_format(now(), '%Y-%m-%d') AND state NOT LIKE 'R'
+        SELECT * FROM application WHERE userId = #{userId}
+        AND applicationDate >= date_format(now(), '%Y-%m-%d') AND state NOT LIKE 'R'
     </select>
-
 </mapper>

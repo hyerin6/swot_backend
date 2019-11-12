@@ -21,9 +21,7 @@ public class SHA256Util{
             }
             result = sb.toString();
         } catch (NoSuchAlgorithmException e) {
-
         } catch (Exception e) {
-
         }
         return result;
     }
