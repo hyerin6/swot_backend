@@ -37,4 +37,8 @@
         UPDATE reservation SET state = 'D', failReason = #{failReason} WHERE id = #{id}
     </update>
 
+    <update id="deleteByUserId">
+        UPDATE reservation SET state = 'R' WHERE userId = #{userId}
+    </update>
+
 </mapper>

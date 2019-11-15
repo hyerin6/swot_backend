@@ -32,7 +32,8 @@
 
     <select id="findByBoardId" resultType="kr.devdogs.swot.application.dto.Application">
         SELECT * FROM application
-        WHERE boardId = #{boardId} AND applicationDate >= date_format(now(), '%Y-%m-%d') AND state NOT LIKE 'R'
+        WHERE boardId = #{boardId} AND applicationDate >= date_format(now(), '%Y-%m-%d')
+        AND state NOT LIKE 'R'
     </select>
 
     <select id="findById" resultType="kr.devdogs.swot.application.dto.Application">
@@ -50,4 +51,9 @@
         SELECT * FROM application WHERE userId = #{userId}
         AND applicationDate >= date_format(now(), '%Y-%m-%d') AND state NOT LIKE 'R'
     </select>
+
+    <update id ="deleteByUserId">
+        UPDATE application SET state = 'R' WHERE userId = #{userId}
+    </update>
+
 </mapper>

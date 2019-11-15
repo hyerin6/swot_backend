@@ -17,4 +17,6 @@ public interface ApplicationMapper {
     public int delete(int id);
     public int deleteByBoardId(int boardId);
     public int complete(int id);
+    public int deleteByUserId(int userId);
+    public int findAll(int id);
 }

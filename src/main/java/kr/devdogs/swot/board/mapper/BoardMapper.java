@@ -15,4 +15,6 @@ public interface BoardMapper {
     public int modify(Board board);
     public int delete(int id);
     public int complete(int id);
+    public int deleteByUserId(int userId);
+    public Board findByMyStudy(int id);
 }

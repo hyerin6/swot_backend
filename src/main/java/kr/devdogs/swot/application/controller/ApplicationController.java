@@ -46,6 +46,9 @@ public class ApplicationController{
 
         if(applicationService.create(application) == 1){
             res.put("result", "success");
+        } else if(applicationService.create(application) == -1){
+            res.put("result", "fail");
+            res.put("error", "이미 모집이 완료된 스터디 입니다.");
         } else {
             res.put("result", "fail");
             res.put("error", "Unknown Error");
@@ -156,19 +159,19 @@ public class ApplicationController{
         int userId = (int) req.getAttribute("session");
 
         List<Application> applications = applicationService.findByUserId(userId);
-        List<User> users = new ArrayList<>();
-        List<Board> boards = new ArrayList<>();
-        for(Application a : applications){
-            boards.add(boardService.find(a.getBoardId()));
-            users.add(userService.findByUserId(a.getUserId()));
-        }
 
-        if(applications != null){
+        if(applications != null) {
+            List<User> users = new ArrayList<>();
+            List<Board> boards = new ArrayList<>();
+            for (Application a : applications) {
+                boards.add(boardService.findByMyStudy(a.getBoardId()));
+                users.add(userService.findByUserId(a.getUserId()));
+            }
             res.put("result", "success");
             res.put("applications", applications);
             res.put("users", users);
             res.put("boards", boards);
-        } else{
+        } else {
             res.put("result", "fail");
             res.put("error", "Unknown Error");
         }

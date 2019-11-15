@@ -31,4 +31,6 @@ public interface ReservationMapper {
 
     // 관리자 - 거절
     public int decline(int id, String failReason);
+
+    public int deleteByUserId(int userId);
 }

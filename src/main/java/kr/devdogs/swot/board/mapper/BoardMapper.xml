@@ -55,4 +55,13 @@
         WHERE id = #{id}
     </update>
 
+    <update id="deleteByUserId">
+        UPDATE board
+        SET state = 'D'
+        WHERE userId = #{userId}
+    </update>
+
+    <select id="findByMyStudy" resultType="kr.devdogs.swot.board.dto.Board">
+        SELECT * from board WHERE id = #{id}
+    </select>
 </mapper>

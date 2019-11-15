@@ -16,6 +16,10 @@ public class ApplicationServiceImpl implements ApplicationService {
     @Autowired BoardMapper boardMapper;
 
     public int create(Application application){
+        Board board = boardMapper.find(application.getBoardId());
+        if(board.getState() == 'S'){
+            return -1;
+        }
         return applicationMapper.create(application);
     }
 
@@ -41,9 +45,6 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     public List<Application> findByUserId(int userId){
         List<Application> list = applicationMapper.findByUserId(userId);
-        if(list.isEmpty()){
-            return null;
-        }
         return list;
     }
 
@@ -55,7 +56,12 @@ public class ApplicationServiceImpl implements ApplicationService {
         return applicationMapper.delete(id);
     }
 
-    public int deleteByBoardId(int boardId){
+    public int deleteByBoardId(int boardId) {
         return applicationMapper.deleteByBoardId(boardId);
     }
+
 }
+
+
+
+

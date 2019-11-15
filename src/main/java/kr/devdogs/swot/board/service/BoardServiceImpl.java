@@ -95,4 +95,20 @@ public class BoardServiceImpl implements BoardService{
         return boardMapper.complete(id);
     }
 
+
+    // 회원 탈퇴의 경우
+    @Override
+    public int deleteByUserId(int userId){
+        List<Board> boards = boardMapper.findByUserId(userId);
+        for(Board b : boards) {
+            applicationMapper.deleteByBoardId(b.getId());
+        }
+        return boardMapper.deleteByUserId(userId);
+    }
+
+    @Override
+    public Board findByMyStudy(int id){
+        return boardMapper.findByMyStudy(id);
+    }
+
 }

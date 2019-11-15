@@ -17,6 +17,10 @@
         UPDATE comment SET state = 'D' WHERE boardId = #{boardId}
     </update>
 
+    <update id="deleteByUserId">
+        UPDATE comment SET state = 'D' WHERE userId = #{userId}
+    </update>
+
     <select id="findByBoardId" resultType="kr.devdogs.swot.comment.dto.Comment">
         SELECT * FROM comment
         WHERE boardId = #{boardId} AND state NOT LIKE 'D'

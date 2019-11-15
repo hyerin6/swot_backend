@@ -13,4 +13,5 @@ public interface CommentMapper {
     public int deleteAll(int boardId);
     public List<Comment> findByBoardId(int boardId);
     public List<Comment> findByUserId(int userId);
+    public int deleteByUserId(int userId);
 }
