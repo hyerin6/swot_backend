@@ -89,8 +89,14 @@ public class UserAuthController {
 
         // 입력한 정보로 회원 조회
         User currentUser = userAuthService.userSignIn(user);
-        char state = currentUser.getState();
 
+        if(currentUser == null){
+            res.put("result", "fail");
+            res.put("error", "Unknown Error");
+            return new ResponseEntity<>(res, HttpStatus.OK);
+        }
+
+        char state = currentUser.getState();
         if(state == 'C'){ // 이메일 인증하지 않은 회원인 경우
             res.put("result", "fail");
             res.put("error", "Email unauthenticated");
